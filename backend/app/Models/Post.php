@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PostStatus;
 use App\Enums\PostType;
+use App\Enums\SubmissionStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -72,5 +73,36 @@ class Post extends Model
     protected function published(Builder $query): void
     {
         $query->where('status', PostStatus::Published);
+    }
+
+    /** Relasi yang dibutuhkan PostResource: submission milik siswa, atau hitungan untuk guru. */
+    #[Scope]
+    protected function withViewerDetails(Builder $query, User $viewer, bool $isTeacher): void
+    {
+        $query->with(['author', 'topic', 'attachments'])->withCount('comments');
+
+        $isTeacher
+            ? $query->withCount(self::submissionCountQueries())
+            : $query->with(['submissions' => fn ($q) => $q->where('student_id', $viewer->id)]);
+    }
+
+    public function loadViewerDetails(User $viewer, bool $isTeacher): static
+    {
+        $this->load(['author', 'topic', 'attachments'])->loadCount('comments');
+
+        return $isTeacher
+            ? $this->loadCount(self::submissionCountQueries())
+            : $this->load(['submissions' => fn ($q) => $q->where('student_id', $viewer->id)]);
+    }
+
+    /** Empat kelompok yang jumlahnya sama dengan jumlah siswa (docs/api.md, submission_counts). */
+    private static function submissionCountQueries(): array
+    {
+        return [
+            'submissions as assigned_count' => fn ($q) => $q->where('status', SubmissionStatus::Assigned),
+            'submissions as turned_in_count' => fn ($q) => $q->where('status', SubmissionStatus::TurnedIn)->whereNull('draft_grade'),
+            'submissions as graded_count' => fn ($q) => $q->where('status', SubmissionStatus::TurnedIn)->whereNotNull('draft_grade'),
+            'submissions as returned_count' => fn ($q) => $q->where('status', SubmissionStatus::Returned),
+        ];
     }
 }

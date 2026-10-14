@@ -18,6 +18,12 @@ class CoursePolicy
         return $user->isTeacherOf($course);
     }
 
+    /** Topik, materi, tugas, kuis, dan penilaian. */
+    public function manageClasswork(User $user, Course $course): bool
+    {
+        return $user->isTeacherOf($course);
+    }
+
     public function inviteTeacher(User $user, Course $course): bool
     {
         return $user->owns($course);

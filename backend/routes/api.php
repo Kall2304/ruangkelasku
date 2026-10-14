@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AttachmentController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\CourseController;
 use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\Api\V1\MemberController;
+use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\ProfileController;
+use App\Http\Controllers\Api\V1\TopicController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -41,5 +45,30 @@ Route::prefix('v1')->group(function () {
         Route::delete('invitations/{invitation}', [InvitationController::class, 'destroy']);
         Route::post('invitations/{invitation}/accept', [InvitationController::class, 'accept']);
         Route::post('invitations/{invitation}/decline', [InvitationController::class, 'decline']);
+
+        // Topik
+        Route::get('courses/{course}/topics', [TopicController::class, 'index']);
+        Route::post('courses/{course}/topics', [TopicController::class, 'store']);
+        Route::put('courses/{course}/topics/order', [TopicController::class, 'reorder']);
+        Route::patch('topics/{topic}', [TopicController::class, 'update']);
+        Route::delete('topics/{topic}', [TopicController::class, 'destroy']);
+
+        // Posting: Stream dan Tugas Kelas membaca tabel posts yang sama
+        Route::get('courses/{course}/stream', [PostController::class, 'stream']);
+        Route::get('courses/{course}/classwork', [PostController::class, 'classwork']);
+        Route::get('courses/{course}/posts/upcoming', [PostController::class, 'upcoming']);
+        Route::post('courses/{course}/posts', [PostController::class, 'store']);
+        Route::get('posts/{post}', [PostController::class, 'show']);
+        Route::patch('posts/{post}', [PostController::class, 'update']);
+        Route::delete('posts/{post}', [PostController::class, 'destroy']);
+        Route::post('posts/{post}/publish', [PostController::class, 'publish']);
+        Route::put('posts/{post}/position', [PostController::class, 'move']);
+
+        // Lampiran dan komentar kelas
+        Route::post('posts/{post}/attachments', [AttachmentController::class, 'store']);
+        Route::delete('attachments/{attachment}', [AttachmentController::class, 'destroy']);
+        Route::get('posts/{post}/comments', [CommentController::class, 'index']);
+        Route::post('posts/{post}/comments', [CommentController::class, 'store']);
+        Route::delete('comments/{comment}', [CommentController::class, 'destroy']);
     });
 });
