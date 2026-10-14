@@ -43,25 +43,24 @@ class StreamPage extends ConsumerWidget {
 
     final feedColumn = <Widget>[
       if (course.canPostToStream && !course.isArchived) _ComposerPrompt(courseId: courseId),
-      ...switch (feed) {
-        AsyncData(:final value) when value.posts.isEmpty => [
-          const RukiView(pose: RukiPose.read, message: S.emptyStream, size: Sizes.rukiSm),
-        ],
-        AsyncData(:final value) => [
-          for (final post in value.posts) PostCard(post: post),
-          if (value.hasMore)
-            Center(
-              child: value.loadingMore
-                  ? const CircularProgressIndicator()
-                  : TextButton(
-                      onPressed: () => ref.read(streamFeedProvider(courseId).notifier).loadMore(),
-                      child: const Text(S.loadMore),
-                    ),
-            ),
-        ],
-        AsyncError(:final error) => [ErrorView(error: error, onRetry: refresh)],
-        _ => [const SizedBox(height: Sizes.rukiLg, child: SkeletonList(itemCount: 3))],
-      },
+      // Data lama tetap tampil selama Forum dimuat ulang.
+      if (feed.hasValue && feed.requireValue.posts.isEmpty)
+        const RukiView(pose: RukiPose.read, message: S.emptyStream, size: Sizes.rukiSm)
+      else if (feed.hasValue) ...[
+        for (final post in feed.requireValue.posts) PostCard(post: post, onTap: () => context.push('/p/${post.id}')),
+        if (feed.requireValue.hasMore)
+          Center(
+            child: feed.requireValue.loadingMore
+                ? const CircularProgressIndicator()
+                : TextButton(
+                    onPressed: () => ref.read(streamFeedProvider(courseId).notifier).loadMore(),
+                    child: const Text(S.loadMore),
+                  ),
+          ),
+      ] else if (feed.hasError)
+        ErrorView(error: feed.error!, onRetry: refresh)
+      else
+        const SizedBox(height: Sizes.rukiLg, child: SkeletonList(itemCount: 3)),
     ];
 
     return RefreshIndicator(

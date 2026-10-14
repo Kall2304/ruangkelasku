@@ -7,6 +7,7 @@ import '../../../core/copy/strings.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/theme/tokens.dart';
 import '../../../core/utils/format.dart';
+import '../../../core/utils/pick_datetime.dart';
 import '../../../core/widgets/confirm_dialog.dart';
 import '../../../core/widgets/form_widgets.dart';
 import '../../courses/application/courses.dart';
@@ -43,25 +44,8 @@ class _AnnouncePageState extends ConsumerState<AnnouncePage> {
   }
 
   Future<void> _pickSchedule() async {
-    final now = Wib.now;
-    final date = await showDatePicker(
-      context: context,
-      initialDate: now,
-      firstDate: DateTime(now.year, now.month, now.day),
-      lastDate: now.add(const Duration(days: 365)),
-      helpText: S.pickDate,
-    );
-    if (date == null || !mounted) return;
-    final time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: (now.hour + 1) % 24, minute: 0),
-      helpText: S.pickTime,
-    );
-    if (time == null) return;
-
-    // Tanggal dan jam yang dipilih adalah WIB; simpan sebagai UTC.
-    final wib = DateTime.utc(date.year, date.month, date.day, time.hour, time.minute);
-    setState(() => _scheduledAt = wib.subtract(const Duration(hours: 7)));
+    final picked = await pickWibDateTime(context, initialUtc: _scheduledAt);
+    if (picked != null) setState(() => _scheduledAt = picked);
   }
 
   Future<void> _submit() async {

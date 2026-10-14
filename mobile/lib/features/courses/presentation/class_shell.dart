@@ -44,17 +44,15 @@ class ClassShell extends ConsumerWidget {
       onPressed: () => context.go('/'),
     );
 
-    return switch (course) {
-      AsyncData(:final value) => _ClassScaffold(course: value, location: location, back: backButton, child: child),
-      AsyncError(:final error) => Scaffold(
-        appBar: AppBar(leading: backButton),
-        body: ErrorView(error: error, onRetry: () => ref.invalidate(courseProvider(courseId))),
-      ),
-      _ => Scaffold(
-        appBar: AppBar(leading: backButton),
-        body: const SkeletonList(),
-      ),
-    };
+    if (course.hasValue) {
+      return _ClassScaffold(course: course.requireValue, location: location, back: backButton, child: child);
+    }
+    return Scaffold(
+      appBar: AppBar(leading: backButton),
+      body: course.hasError
+          ? ErrorView(error: course.error!, onRetry: () => ref.invalidate(courseProvider(courseId)))
+          : const SkeletonList(),
+    );
   }
 }
 

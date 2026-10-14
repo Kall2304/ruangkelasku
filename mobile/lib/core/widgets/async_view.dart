@@ -21,11 +21,10 @@ class AsyncView<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return switch (value) {
-      AsyncData(:final value) => data(value),
-      AsyncError(:final error) => ErrorView(error: error, onRetry: onRetry),
-      _ => skeleton ?? const SkeletonList(),
-    };
+    // Data lama tetap tampil selama dimuat ulang agar layar (dan isian form) tidak berkedip.
+    if (value.hasValue) return data(value.requireValue);
+    if (value.hasError) return ErrorView(error: value.error!, onRetry: onRetry);
+    return skeleton ?? const SkeletonList();
   }
 }
 
