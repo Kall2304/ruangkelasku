@@ -90,8 +90,8 @@ class DemoSeeder extends Seeder
             'code' => 'mtk11a2',
         ], $students);
 
-        $limit = $this->topic($course, 'Bab 1 – Limit Fungsi');
-        $derivative = $this->topic($course, 'Bab 2 – Turunan');
+        $limit = $this->topic($course, 'Bab 1: Limit Fungsi');
+        $derivative = $this->topic($course, 'Bab 2: Turunan');
 
         $welcome = $this->post($course, [
             'type' => PostType::Announcement,
@@ -115,10 +115,10 @@ class DemoSeeder extends Seeder
         $module = $this->post($course, [
             'type' => PostType::Material,
             'topic_id' => $limit->id,
-            'title' => 'Modul Bab 1 – Limit Fungsi',
+            'title' => 'Modul Bab 1: Limit Fungsi',
             'body' => 'Baca modul ini sebelum mengerjakan latihan.',
         ], $this->ago(days: 6));
-        $this->link($module, 'https://id.wikipedia.org/wiki/Limit_fungsi', 'Limit fungsi – Wikipedia');
+        $this->link($module, 'https://id.wikipedia.org/wiki/Limit_fungsi', 'Limit fungsi - Wikipedia');
 
         $formulas = $this->post($course, [
             'type' => PostType::Material,
@@ -126,14 +126,14 @@ class DemoSeeder extends Seeder
             'title' => 'Rumus Dasar Turunan',
             'body' => 'Ringkasan rumus turunan yang dipakai di Bab 2.',
         ], $this->ago(days: 3));
-        $this->link($formulas, 'https://id.wikipedia.org/wiki/Turunan', 'Turunan – Wikipedia');
+        $this->link($formulas, 'https://id.wikipedia.org/wiki/Turunan', 'Turunan - Wikipedia');
 
         // Tenggat lewat: dikembalikan, dinilai (draf) terlambat, terlewat, diserahkan.
         $limitPractice = $this->post($course, [
             'type' => PostType::Assignment,
             'topic_id' => $limit->id,
             'title' => 'Latihan Limit Fungsi',
-            'body' => 'Kerjakan soal 1–10 di halaman 32. Unggah foto jawaban yang jelas.',
+            'body' => 'Kerjakan soal 1-10 di halaman 32. Unggah foto jawaban yang jelas.',
             'points' => 100,
             'due_at' => $this->ago(days: 3),
         ], $this->ago(days: 6));
@@ -170,7 +170,7 @@ class DemoSeeder extends Seeder
             'type' => PostType::Assignment,
             'topic_id' => $derivative->id,
             'title' => 'Latihan Turunan Fungsi',
-            'body' => 'Kerjakan soal 1–10 di halaman 54.',
+            'body' => 'Kerjakan soal 1-10 di halaman 54.',
             'points' => 100,
             'due_at' => now()->addDays(4)->setTime(16, 59),
         ], $this->ago(days: 2));
@@ -187,7 +187,7 @@ class DemoSeeder extends Seeder
             'due_at' => now()->addDay()->setTime(16, 59),
         ], $this->ago(days: 2));
         $dimasStory = $this->turnedIn($storyProblems, $dimas, $this->ago(hours: 3));
-        $this->link($dimasStory, 'https://docs.example.com/dimas-soal-cerita', 'Jawaban soal cerita – Dimas', $dimas);
+        $this->link($dimasStory, 'https://docs.example.com/dimas-soal-cerita', 'Jawaban soal cerita Dimas', $dimas);
         $this->turnedIn($storyProblems, $budi, $this->ago(hours: 5));
 
         // Tanpa tenggat: dinilai (draf).
@@ -264,13 +264,13 @@ class DemoSeeder extends Seeder
             'title' => 'Contoh Teks Eksposisi',
             'body' => 'Perhatikan struktur tesis, argumentasi, dan penegasan ulang.',
         ], $this->ago(days: 3));
-        $this->link($example, 'https://id.wikipedia.org/wiki/Eksposisi', 'Eksposisi – Wikipedia');
+        $this->link($example, 'https://id.wikipedia.org/wiki/Eksposisi', 'Eksposisi - Wikipedia');
 
         $essay = $this->post($course, [
             'type' => PostType::Assignment,
             'topic_id' => $exposition->id,
             'title' => 'Menulis Teks Eksposisi',
-            'body' => 'Tulis teks eksposisi 300–500 kata dengan tema lingkungan sekolah.',
+            'body' => 'Tulis teks eksposisi 300-500 kata dengan tema lingkungan sekolah.',
             'points' => 100,
             'due_at' => now()->addDays(5)->setTime(16, 59),
         ], $this->ago(days: 2));

@@ -125,7 +125,7 @@ class SubmissionTest extends TestCase
         Sanctum::actingAs($this->student);
         $this->getJson("/api/v1/posts/{$this->post->id}/my-submission")->assertJsonPath('data.grade', 85.5);
         $this->assertSame(
-            'Judul – nilai 85.5/100',
+            'Judul: nilai 85.5/100',
             $this->student->notifications()->where('type', 'submission_returned')->first()->data['message'],
         );
     }

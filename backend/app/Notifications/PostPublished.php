@@ -26,7 +26,7 @@ class PostPublished extends AppNotification
 
         return [
             'title' => $title,
-            'message' => $this->post->course->name.' – '.self::excerpt($this->post->title ?? $this->post->body),
+            'message' => $this->post->course->name.': '.self::excerpt($this->post->title ?? $this->post->body),
             'course_id' => $this->post->course_id,
             'post_id' => $this->post->id,
         ];

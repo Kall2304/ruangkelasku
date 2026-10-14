@@ -19,7 +19,7 @@ class SubmissionReturned extends AppNotification
         $message = $post->title;
 
         if ($this->submission->grade !== null && $post->points !== null) {
-            $message .= ' – nilai '.self::number($this->submission->grade).'/'.$post->points;
+            $message .= ': nilai '.self::number($this->submission->grade).'/'.$post->points;
         }
 
         return [
