@@ -26,7 +26,8 @@ return [
 
     'allowed_headers' => ['*'],
 
-    'exposed_headers' => [],
+    // Nama file ekspor CSV untuk Flutter Web.
+    'exposed_headers' => ['Content-Disposition'],
 
     'max_age' => 0,
 

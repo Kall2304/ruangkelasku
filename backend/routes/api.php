@@ -4,10 +4,17 @@ use App\Http\Controllers\Api\V1\AttachmentController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\CourseController;
+use App\Http\Controllers\Api\V1\GradeController;
 use App\Http\Controllers\Api\V1\InvitationController;
 use App\Http\Controllers\Api\V1\MemberController;
+use App\Http\Controllers\Api\V1\MySubmissionController;
+use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\PostController;
+use App\Http\Controllers\Api\V1\PrivateCommentController;
 use App\Http\Controllers\Api\V1\ProfileController;
+use App\Http\Controllers\Api\V1\QuizController;
+use App\Http\Controllers\Api\V1\SubmissionController;
+use App\Http\Controllers\Api\V1\TodoController;
 use App\Http\Controllers\Api\V1\TopicController;
 use Illuminate\Support\Facades\Route;
 
@@ -70,5 +77,38 @@ Route::prefix('v1')->group(function () {
         Route::get('posts/{post}/comments', [CommentController::class, 'index']);
         Route::post('posts/{post}/comments', [CommentController::class, 'store']);
         Route::delete('comments/{comment}', [CommentController::class, 'destroy']);
+
+        // Kuis
+        Route::get('posts/{post}/quiz', [QuizController::class, 'show']);
+        Route::put('posts/{post}/quiz', [QuizController::class, 'update']);
+
+        // Pengumpulan: sisi siswa
+        Route::get('posts/{post}/my-submission', [MySubmissionController::class, 'show']);
+        Route::post('posts/{post}/my-submission/attachments', [MySubmissionController::class, 'storeAttachment']);
+        Route::delete('posts/{post}/my-submission/attachments/{attachment}', [MySubmissionController::class, 'destroyAttachment']);
+        Route::post('posts/{post}/my-submission/turn-in', [MySubmissionController::class, 'turnIn']);
+        Route::post('posts/{post}/my-submission/unsubmit', [MySubmissionController::class, 'unsubmit']);
+        Route::post('posts/{post}/my-submission/quiz', [MySubmissionController::class, 'submitQuiz']);
+
+        // Pengumpulan: sisi guru
+        Route::get('posts/{post}/submissions', [SubmissionController::class, 'index']);
+        Route::post('posts/{post}/return', [SubmissionController::class, 'return']);
+        Route::get('submissions/{submission}', [SubmissionController::class, 'show']);
+        Route::patch('submissions/{submission}/grade', [SubmissionController::class, 'grade']);
+        Route::get('submissions/{submission}/comments', [PrivateCommentController::class, 'index']);
+        Route::post('submissions/{submission}/comments', [PrivateCommentController::class, 'store']);
+
+        // Nilai
+        Route::get('courses/{course}/grades', [GradeController::class, 'index']);
+        Route::get('courses/{course}/grades/export', [GradeController::class, 'export']);
+        Route::get('courses/{course}/my-work', [GradeController::class, 'myWork']);
+
+        // To-do dan notifikasi
+        Route::get('todo', [TodoController::class, 'todo']);
+        Route::get('to-review', [TodoController::class, 'toReview']);
+        Route::get('notifications', [NotificationController::class, 'index']);
+        Route::get('notifications/unread-count', [NotificationController::class, 'unreadCount']);
+        Route::post('notifications/read-all', [NotificationController::class, 'readAll']);
+        Route::post('notifications/{id}/read', [NotificationController::class, 'read']);
     });
 });

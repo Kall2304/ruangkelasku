@@ -7,6 +7,7 @@ use App\Enums\PostStatus;
 use App\Enums\PostType;
 use App\Models\Course;
 use App\Models\Post;
+use App\Models\QuizQuestion;
 use App\Models\User;
 use App\Services\PublishPostService;
 
@@ -40,10 +41,34 @@ trait BuildsCourses
             'position' => 0,
         ]);
 
+        if ($type === PostType::Quiz) {
+            $this->addQuizQuestion($post);
+        }
+
         if ($publish) {
             app(PublishPostService::class)->publish($post);
         }
 
         return $post->fresh();
+    }
+
+    /** Soal pilihan ganda; opsi indeks $correct yang benar. */
+    protected function addQuizQuestion(Post $post, int $points = 10, int $correct = 0, int $options = 3): QuizQuestion
+    {
+        $question = $post->quizQuestions()->create([
+            'prompt' => 'Soal '.($post->quizQuestions()->count() + 1),
+            'points' => $points,
+            'position' => $post->quizQuestions()->count(),
+        ]);
+        foreach (range(0, $options - 1) as $index) {
+            $question->options()->create([
+                'label' => 'Opsi '.chr(65 + $index),
+                'is_correct' => $index === $correct,
+                'position' => $index,
+            ]);
+        }
+        $post->update(['points' => $post->quizQuestions()->sum('points')]);
+
+        return $question;
     }
 }

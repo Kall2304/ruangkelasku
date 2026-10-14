@@ -15,6 +15,10 @@ use App\Models\QuizQuestion;
 use App\Models\Submission;
 use App\Models\Topic;
 use App\Models\User;
+use App\Notifications\CourseInvitationReceived;
+use App\Notifications\PrivateCommentPosted;
+use App\Notifications\SubmissionReturned;
+use App\Notifications\SubmissionTurnedIn;
 use App\Services\PublishPostService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
@@ -43,6 +47,33 @@ class DemoSeeder extends Seeder
 
         $this->seedMath([$dimas, $sari, $budi, $ayu, $rizky]);
         $this->seedIndonesian([$sari, $budi, $ayu, $rizky], invitee: $dimas);
+        $this->seedNotifications($dimas);
+    }
+
+    /**
+     * Status di atas diisi langsung, jadi notifikasinya dikirim di sini. Notifikasi
+     * "posting baru" lama ditandai sudah dibaca agar lonceng menunjukkan yang penting saja.
+     */
+    private function seedNotifications(User $dimas): void
+    {
+        User::query()->each(fn (User $user) => $user->unreadNotifications()->update(['read_at' => now()]));
+
+        $returned = Submission::where('student_id', $dimas->id)
+            ->where('status', SubmissionStatus::Returned)
+            ->with('post')
+            ->firstOrFail();
+        $dimas->notify(new SubmissionReturned($returned));
+        $dimas->notify(new CourseInvitationReceived(Invitation::with(['course', 'inviter'])->firstOrFail()));
+
+        $turnedIn = Submission::where('student_id', $dimas->id)
+            ->where('status', SubmissionStatus::TurnedIn)
+            ->whereNull('draft_grade')
+            ->with(['post', 'student'])
+            ->firstOrFail();
+        $this->teacher->notify(new SubmissionTurnedIn($turnedIn));
+        $this->teacher->notify(new PrivateCommentPosted(
+            PrivateComment::where('user_id', $dimas->id)->with(['user', 'submission.post'])->firstOrFail(),
+        ));
     }
 
     /** @param  list<User>  $students  [dimas, sari, budi, ayu, rizky] */

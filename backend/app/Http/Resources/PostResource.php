@@ -19,6 +19,12 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'course_id' => $this->course_id,
+            // Untuk daftar lintas kelas (To-do, Perlu diperiksa).
+            'course' => $this->whenLoaded('course', fn () => [
+                'id' => $this->course->id,
+                'name' => $this->course->name,
+                'theme' => $this->course->theme,
+            ]),
             'type' => $this->type,
             'title' => $this->title,
             'body' => $this->body,

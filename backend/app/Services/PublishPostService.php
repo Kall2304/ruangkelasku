@@ -3,9 +3,13 @@
 namespace App\Services;
 
 use App\Enums\PostStatus;
+use App\Enums\PostType;
 use App\Enums\SubmissionStatus;
 use App\Models\Post;
+use App\Notifications\PostPublished;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\ValidationException;
 
 /** Satu jalur penerbitan untuk tombol "Terbitkan" dan scheduler posting terjadwal. */
 class PublishPostService
@@ -16,7 +20,13 @@ class PublishPostService
             return $post;
         }
 
-        return DB::transaction(function () use ($post) {
+        if ($post->type === PostType::Quiz && ! $post->quizQuestions()->exists()) {
+            throw ValidationException::withMessages([
+                'status' => ['Tambahkan minimal satu soal sebelum menerbitkan kuis.'],
+            ]);
+        }
+
+        DB::transaction(function () use ($post) {
             $post->update([
                 'status' => PostStatus::Published,
                 'published_at' => now(),
@@ -25,9 +35,12 @@ class PublishPostService
             if ($post->type->requiresSubmissions()) {
                 $this->createSubmissions($post);
             }
-
-            return $post;
         });
+
+        $recipients = $post->course->users()->whereKeyNot($post->author_id)->get();
+        Notification::send($recipients, new PostPublished($post));
+
+        return $post;
     }
 
     /** Satu baris submissions per siswa; aman dipanggil ulang. */

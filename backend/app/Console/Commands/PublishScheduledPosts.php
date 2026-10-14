@@ -6,6 +6,7 @@ use App\Enums\PostStatus;
 use App\Models\Post;
 use App\Services\PublishPostService;
 use Illuminate\Console\Command;
+use Illuminate\Validation\ValidationException;
 
 /** Dijalankan tiap menit oleh `php artisan schedule:work`. */
 class PublishScheduledPosts extends Command
@@ -23,8 +24,13 @@ class PublishScheduledPosts extends Command
             ->whereHas('course', fn ($query) => $query->whereNull('archived_at'))
             ->with('course')
             ->each(function (Post $post) use ($publisher, &$published) {
-                $publisher->publish($post);
-                $published++;
+                try {
+                    $publisher->publish($post);
+                    $published++;
+                } catch (ValidationException) {
+                    // Kuis tanpa soal tetap terjadwal sampai guru menambahkan soal.
+                    $this->warn("Posting #{$post->id} dilewati: kuis belum punya soal.");
+                }
             });
 
         $this->info("{$published} posting diterbitkan.");

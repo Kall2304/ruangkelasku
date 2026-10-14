@@ -7,6 +7,7 @@ use App\Exceptions\DomainActionException;
 use App\Models\Course;
 use App\Models\Invitation;
 use App\Models\User;
+use App\Notifications\CourseInvitationReceived;
 use Illuminate\Support\Facades\DB;
 
 /** Undangan di dalam aplikasi; tidak ada email sungguhan yang dikirim. */
@@ -32,12 +33,17 @@ class InvitationService
             throw new DomainActionException('already_invited', 'Email ini sudah diundang ke kelas ini.');
         }
 
-        return $course->invitations()->create([
+        $invitation = $course->invitations()->create([
             'invited_by' => $inviter->id,
             'email' => $email,
             'role' => $role,
             'status' => 'pending',
         ]);
+
+        // Email yang belum terdaftar melihat undangannya setelah mendaftar.
+        $invitee?->notify(new CourseInvitationReceived($invitation));
+
+        return $invitation;
     }
 
     public function accept(Invitation $invitation, User $user): Course

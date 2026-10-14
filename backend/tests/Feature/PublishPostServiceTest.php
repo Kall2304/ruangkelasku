@@ -88,7 +88,7 @@ class PublishPostServiceTest extends TestCase
 
     private function draft(Course $course, PostType $type): Post
     {
-        return Post::create([
+        $post = Post::create([
             'course_id' => $course->id,
             'author_id' => $course->owner_id,
             'type' => $type,
@@ -96,5 +96,11 @@ class PublishPostServiceTest extends TestCase
             'status' => PostStatus::Draft,
             'position' => 0,
         ]);
+
+        if ($type === PostType::Quiz) {
+            $post->quizQuestions()->create(['prompt' => 'Soal', 'points' => 1, 'position' => 0]);
+        }
+
+        return $post;
     }
 }
