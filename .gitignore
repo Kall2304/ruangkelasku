@@ -1,0 +1,14 @@
+# Aturan khusus ada di backend/.gitignore dan mobile/.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.idea/
+*.iml
+.vscode/
+
+# Log
+*.log
