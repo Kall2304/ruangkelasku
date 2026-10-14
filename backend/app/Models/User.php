@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\CourseRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -53,5 +54,30 @@ class User extends Authenticatable
     public function submissions(): HasMany
     {
         return $this->hasMany(Submission::class, 'student_id');
+    }
+
+    public function roleIn(Course $course): ?CourseRole
+    {
+        return $this->memberships()->where('course_id', $course->id)->first()?->role;
+    }
+
+    public function isMemberOf(Course $course): bool
+    {
+        return $this->roleIn($course) !== null;
+    }
+
+    public function isTeacherOf(Course $course): bool
+    {
+        return $this->roleIn($course) === CourseRole::Teacher;
+    }
+
+    public function isStudentOf(Course $course): bool
+    {
+        return $this->roleIn($course) === CourseRole::Student;
+    }
+
+    public function owns(Course $course): bool
+    {
+        return $course->owner_id === $this->id;
     }
 }

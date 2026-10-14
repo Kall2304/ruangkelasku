@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Enums\CourseRole;
+use App\Exceptions\DomainActionException;
+use Database\Factories\CourseFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -17,7 +20,11 @@ use Illuminate\Support\Str;
 ])]
 class Course extends Model
 {
-    use SoftDeletes;
+    /** @use HasFactory<CourseFactory> */
+    use HasFactory, SoftDeletes;
+
+    /** Kunci tema header kelas; lihat docs/design.md bagian Tema kelas. */
+    public const THEMES = ['forest', 'ocean', 'sunset', 'grape', 'rose', 'lagoon', 'mango', 'slate'];
 
     protected function casts(): array
     {
@@ -72,6 +79,14 @@ class Course extends Model
     public function isArchived(): bool
     {
         return $this->archived_at !== null;
+    }
+
+    /** Kelas terarsip bersifat baca-saja. */
+    public function ensureNotArchived(): void
+    {
+        if ($this->isArchived()) {
+            throw new DomainActionException('course_archived', 'Kelas ini sudah diarsipkan.');
+        }
     }
 
     /** Kode 7 karakter huruf kecil dan angka, seperti Google Classroom. */
