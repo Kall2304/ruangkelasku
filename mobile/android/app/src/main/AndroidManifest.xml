@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- API Laravel di Laragon (http, bukan https) -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="ruangkelasku"
+        android:label="RuangKelasku"
+        android:usesCleartextTraffic="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

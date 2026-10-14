@@ -1,5 +1,5 @@
 name: ruangkelasku
-description: "A new Flutter project."
+description: "RuangKelasku: clone Google Classroom untuk UTS Pemrograman Aplikasi Bergerak."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -53,6 +53,7 @@ dependencies:
   image_picker: ^1.2.4
   share_plus: ^13.3.1
   url_launcher: ^6.3.3
+  material_ui: ^1.6.0
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +80,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/mascot/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
