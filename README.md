@@ -6,6 +6,21 @@ Clone Google Classroom untuk UTS mata kuliah Pemrograman Aplikasi Bergerak.
 | --- | --- |
 | Haikal Ahmad El Salman | _(isi NIM)_ |
 
+## Google Classroom → RuangKelasku
+
+Tata letak, navigasi, dan label mengikuti Google Classroom versi Indonesia. Nama, logo, warna, dan maskot
+(Ruki) milik RuangKelasku.
+
+| Google Classroom | RuangKelasku |
+| --- | --- |
+| Kelas, kode kelas, tema header | Sama; 8 tema header dengan pola geometris buatan sendiri |
+| Forum, Tugas Kelas, Anggota, Nilai | Sama, dengan urutan tab yang sama |
+| Tugas, Materi, Tugas kuis (Google Forms) | Tugas, Materi, dan kuis pilihan ganda bawaan yang dinilai otomatis |
+| Lampiran Google Drive | Storage Laravel sendiri (maks. 10 MB per file) |
+| Daftar tugas dan Perlu diperiksa | Sama, lintas kelas |
+| Notifikasi push dan email | Notifikasi di dalam aplikasi (polling) |
+| Login akun Google | Email dan password (Laravel Sanctum) |
+
 ## Struktur
 
 | Folder | Isi |
@@ -31,6 +46,15 @@ php artisan storage:link
 php artisan serve --host=0.0.0.0 --port=8000
 php artisan schedule:work   # terminal terpisah, untuk posting terjadwal
 ```
+
+### Akun demo
+
+Dibuat oleh `php artisan migrate --seed`; semua memakai password `password`.
+
+| Peran | Email |
+| --- | --- |
+| Guru | `rina@ruangkelasku.test` |
+| Siswa | `dimas@ruangkelasku.test`, `sari@ruangkelasku.test`, `budi@ruangkelasku.test`, `ayu@ruangkelasku.test`, `rizky@ruangkelasku.test` |
 
 ### Mobile
 
