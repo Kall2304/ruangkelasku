@@ -18,12 +18,15 @@ import '../features/courses/presentation/archived_page.dart';
 import '../features/courses/presentation/class_shell.dart';
 import '../features/courses/presentation/home_page.dart';
 import '../features/courses/presentation/join_create_pages.dart';
+import '../features/notifications/presentation/notifications_page.dart';
 import '../features/people/presentation/people_pages.dart';
 import '../features/quiz/presentation/quiz_take_page.dart';
 import '../features/stream/presentation/announce_page.dart';
 import '../features/stream/presentation/stream_page.dart';
 import '../features/submissions/presentation/private_comments_page.dart';
 import '../features/submissions/presentation/submission_review.dart';
+import '../features/todo/presentation/to_review_page.dart';
+import '../features/todo/presentation/todo_page.dart';
 import 'coming_soon_page.dart';
 
 part 'router.g.dart';
@@ -59,18 +62,9 @@ GoRouter router(Ref ref) {
       GoRoute(path: '/join', builder: (_, _) => const JoinCoursePage()),
       GoRoute(path: '/courses/new', builder: (_, _) => const CreateCoursePage()),
       GoRoute(path: '/archived', builder: (_, _) => const ArchivedPage()),
-      GoRoute(
-        path: '/todo',
-        builder: (_, _) => const ComingSoonPage(location: '/todo', title: S.navTodo),
-      ),
-      GoRoute(
-        path: '/to-review',
-        builder: (_, _) => const ComingSoonPage(location: '/to-review', title: S.navToReview),
-      ),
-      GoRoute(
-        path: '/notifications',
-        builder: (_, _) => const ComingSoonPage(location: '/notifications', title: S.navNotifications),
-      ),
+      GoRoute(path: '/todo', builder: (_, _) => const TodoPage()),
+      GoRoute(path: '/to-review', builder: (_, _) => const ToReviewPage()),
+      GoRoute(path: '/notifications', builder: (_, _) => const NotificationsPage()),
       GoRoute(
         path: '/settings',
         builder: (_, _) => const ComingSoonPage(location: '/settings', title: S.navSettings),

@@ -5,6 +5,7 @@ import '../../../core/utils/uploads.dart';
 import '../../auth/application/session.dart';
 import '../../classwork/application/classwork.dart';
 import '../../stream/application/stream.dart';
+import '../../todo/application/todo.dart';
 import '../data/submission_repository.dart';
 
 part 'submissions.g.dart';
@@ -61,7 +62,8 @@ class SubmissionActions {
     final graded = await _repo.grade(submission.id, draftGrade);
     _ref
       ..invalidate(postSubmissionsProvider(submission.postId))
-      ..invalidate(submissionProvider(submission.id));
+      ..invalidate(submissionProvider(submission.id))
+      ..invalidate(toReviewFeedProvider);
     return graded;
   }
 
@@ -69,7 +71,8 @@ class SubmissionActions {
     await _repo.returnMany(postId, submissionIds);
     _ref
       ..invalidate(postSubmissionsProvider(postId))
-      ..invalidate(postProvider(postId));
+      ..invalidate(postProvider(postId))
+      ..invalidate(toReviewFeedProvider);
     for (final id in submissionIds) {
       _ref.invalidate(submissionProvider(id));
     }
@@ -87,7 +90,9 @@ class SubmissionActions {
     final post = _ref.read(postProvider(postId)).value;
     _ref
       ..invalidate(mySubmissionProvider(postId))
-      ..invalidate(postProvider(postId));
+      ..invalidate(postProvider(postId))
+      // Semua tab dan filter Daftar tugas, karena tugas ini bisa pindah tab.
+      ..invalidate(todoFeedProvider);
     if (post != null) {
       _ref
         ..invalidate(classworkProvider(post.courseId))

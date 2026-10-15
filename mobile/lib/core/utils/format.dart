@@ -21,6 +21,21 @@ String formatDue(DateTime utc) {
   return S.dueAt(formatWib(utc, sameYear ? 'd MMM, HH.mm' : 'd MMM yyyy, HH.mm'));
 }
 
+/// Kelompok tenggat di tab Ditugaskan pada Daftar tugas (docs/api.md, GET /todo).
+enum DueGroup { noDue, thisWeek, nextWeek, later }
+
+/// Minggu dimulai Senin 00.00 WIB.
+DueGroup dueGroupOf(DateTime? dueUtc) {
+  if (dueUtc == null) return DueGroup.noDue;
+  final now = Wib.now;
+  final today = DateTime.utc(now.year, now.month, now.day);
+  final nextWeekStart = today.add(Duration(days: DateTime.daysPerWeek - (today.weekday - DateTime.monday)));
+  final due = Wib.of(dueUtc);
+  if (due.isBefore(nextWeekStart)) return DueGroup.thisWeek;
+  if (due.isBefore(nextWeekStart.add(const Duration(days: DateTime.daysPerWeek)))) return DueGroup.nextWeek;
+  return DueGroup.later;
+}
+
 /// Waktu relatif singkat untuk kartu posting dan komentar.
 String formatRelative(DateTime utc) {
   final diff = DateTime.now().toUtc().difference(utc.toUtc());

@@ -70,6 +70,10 @@ abstract final class Sizes {
   static const double contentMaxWidth = 1040;
   static const double navDrawerWidth = 280;
   static const double sidePanelWidth = 260;
+
+  /// Pola dua panel (daftar di kiri, detail di kanan) aktif bila area konten minimal selebar ini.
+  static const double listDetailMinWidth = 720;
+  static const double listPaneWidth = 340;
   static const double attachmentMaxWidth = 320;
   static const double formMaxWidth = 560;
   static const double focusRingWidth = 2;

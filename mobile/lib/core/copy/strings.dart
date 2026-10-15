@@ -291,6 +291,34 @@ abstract final class S {
   static const cancelInvitation = 'Batalkan undangan';
   static String invitePageTitle(bool teacher) => teacher ? inviteTeacher : inviteStudent;
 
+  // Daftar tugas dan Perlu diperiksa
+  static const todoAssigned = 'Ditugaskan';
+  static const todoMissing = 'Tidak diserahkan';
+  static const todoDone = 'Selesai';
+  static const allClasses = 'Semua kelas';
+  static const filterClass = 'Kelas';
+  static const dueGroups = {
+    'noDue': 'Tanpa tenggat',
+    'thisWeek': 'Minggu ini',
+    'nextWeek': 'Minggu depan',
+    'later': 'Nanti',
+  };
+  static const emptyTodoAssigned = 'Semua beres. Saatnya istirahat sebentar.';
+  static const emptyTodoMissing = 'Tidak ada tugas yang terlewat. Pertahankan, ya!';
+  static const emptyTodoDone = 'Belum ada tugas yang selesai.';
+  static String missingWorried(int n) => 'Ada $n tugas yang terlewat. Masih bisa dikumpulkan, kok.';
+  static const emptyToReview = 'Belum ada tugas untuk diperiksa.';
+  static const selectItem = 'Pilih item di daftar untuk melihat detailnya.';
+  static const countTurnedInLabel = 'Diserahkan';
+  static const countAssignedLabel = 'Ditugaskan';
+  static const countGradedLabel = 'Dinilai';
+
+  // Notifikasi
+  static const emptyNotifications = 'Belum ada notifikasi.';
+  static const markAllRead = 'Tandai semua sudah dibaca';
+  static const unread = 'Belum dibaca';
+  static String badgeCount(int n) => n > 99 ? '99+' : '$n';
+
   // Status submission
   static const statusLabels = {
     'assigned': 'Ditugaskan',

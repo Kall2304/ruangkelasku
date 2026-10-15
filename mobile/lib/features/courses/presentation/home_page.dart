@@ -1,4 +1,3 @@
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -15,6 +14,7 @@ import '../../../core/widgets/confirm_dialog.dart';
 import '../../../core/widgets/course_banner.dart';
 import '../../../core/widgets/form_widgets.dart';
 import '../../../core/widgets/ruki_view.dart';
+import '../../../core/widgets/staggered.dart';
 import '../application/courses.dart';
 import '../data/course.dart';
 import 'course_card.dart';
@@ -62,7 +62,11 @@ class HomePage extends ConsumerWidget {
                 ],
                 CourseGrid(
                   children: [
-                    for (final (i, course) in list.indexed) _staggered(context, i, _HomeCourseCard(course: course)),
+                    for (final (i, course) in list.indexed)
+                      Staggered(
+                        index: i,
+                        child: _HomeCourseCard(course: course),
+                      ),
                   ],
                 ),
               ],
@@ -71,15 +75,6 @@ class HomePage extends ConsumerWidget {
         },
       ),
     );
-  }
-
-  /// Kartu masuk berurutan: fade + naik 12 dp, 40 ms per kartu, maksimal 8.
-  Widget _staggered(BuildContext context, int index, Widget child) {
-    if (context.reduceMotion || index >= Motion.staggerMaxItems) return child;
-    return child
-        .animate(delay: Motion.stagger * index)
-        .fadeIn(duration: Motion.medium, curve: Motion.enter)
-        .moveY(begin: Motion.enterOffset, end: 0, duration: Motion.medium, curve: Motion.enter);
   }
 }
 

@@ -6,9 +6,11 @@ import 'package:material_ui/material_ui.dart';
 import '../core/copy/strings.dart';
 import '../core/theme/tokens.dart';
 import '../core/widgets/adaptive_scaffold.dart';
+import '../core/widgets/notification_bell.dart';
 import '../core/widgets/user_avatar.dart';
 import '../features/auth/application/session.dart';
 import '../features/courses/application/courses.dart';
+import '../features/notifications/application/notifications.dart';
 
 /// Kerangka halaman tingkat atas dengan navigasi global (drawer/rail).
 /// "Daftar tugas" hanya muncul bila pengguna siswa di suatu kelas,
@@ -78,7 +80,11 @@ class GlobalScaffold extends ConsumerWidget {
       destinations: destinations,
       selectedIndex: selected < 0 ? null : selected,
       onDestinationSelected: (i) => context.go(destinations[i].path),
-      actions: [...actions, const _AccountMenu()],
+      actions: [
+        ...actions,
+        NotificationBell(count: ref.watch(unreadCountProvider), onPressed: () => context.go('/notifications')),
+        const _AccountMenu(),
+      ],
       floatingActionButton: floatingActionButton,
     );
   }
