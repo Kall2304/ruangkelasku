@@ -86,6 +86,10 @@ class ClassworkRepository {
     final response = await _dio.put<Map<String, dynamic>>('/posts/$postId/quiz', data: {'questions': questions});
     return (response.data!['data'] as List).map((e) => QuizQuestion.fromJson(e as Map<String, dynamic>)).toList();
   });
+
+  /// Bentuk Pertanyaan (stretch): [options] kosong = jawaban singkat, 2–5 = pilihan ganda.
+  Future<void> saveQuestion(int postId, List<String> options) =>
+      apiCall(() => _dio.put<void>('/posts/$postId/question', data: {'options': options}));
 }
 
 @Riverpod(keepAlive: true)

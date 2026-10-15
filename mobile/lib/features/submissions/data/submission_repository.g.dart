@@ -32,6 +32,7 @@ _Submission _$SubmissionFromJson(Map<String, dynamic> json) => _Submission(
   attachments:
       (json['attachments'] as List<dynamic>?)?.map((e) => Attachment.fromJson(e as Map<String, dynamic>)).toList() ??
       const <Attachment>[],
+  answerText: json['answer_text'] as String?,
   quizAnswers: (json['quiz_answers'] as List<dynamic>?)
       ?.map((e) => QuizAnswerRef.fromJson(e as Map<String, dynamic>))
       .toList(),
@@ -50,6 +51,7 @@ Map<String, dynamic> _$SubmissionToJson(_Submission instance) => <String, dynami
   'turned_in_at': instance.turnedInAt?.toIso8601String(),
   'returned_at': instance.returnedAt?.toIso8601String(),
   'attachments': instance.attachments.map((e) => e.toJson()).toList(),
+  'answer_text': instance.answerText,
   'quiz_answers': instance.quizAnswers?.map((e) => e.toJson()).toList(),
   'private_comment_count': instance.privateCommentCount,
 };

@@ -57,6 +57,9 @@ class SubmissionActions {
 
   Future<void> submitQuiz(int postId, Map<int, int?> answers) => _mine(postId, () => _repo.submitQuiz(postId, answers));
 
+  Future<void> answerQuestion(int postId, {String? answerText, int? optionId}) =>
+      _mine(postId, () => _repo.answerQuestion(postId, answerText: answerText, optionId: optionId));
+
   // Guru
 
   Future<Submission> grade(Submission submission, num? draftGrade) async {

@@ -220,6 +220,20 @@ abstract final class S {
   static const quizIncomplete = 'Lengkapi semua pertanyaan dan opsi, lalu pilih satu jawaban benar per soal.';
   static String totalPoints(int n) => 'Total $n poin';
 
+  // Pertanyaan (stretch)
+  static const createQuestion = 'Pertanyaan';
+  static const questionField = 'Pertanyaan';
+  static const shortAnswer = 'Jawaban singkat';
+  static const multipleChoice = 'Pilihan ganda';
+  static const questionKind = 'Jenis jawaban';
+  static const optionsIncomplete = 'Isi semua opsi pilihan ganda.';
+  static const questionPosted = 'Pertanyaan diposting';
+  static const ask = 'Tanyakan';
+  static const yourAnswerHint = 'Jawaban Anda';
+  static const answer = 'Jawaban';
+  static const answerAgain = 'Jawab lagi';
+  static const notAnswered = 'Belum menjawab.';
+
   // Detail posting dan komentar
   static const tabInstructions = 'Petunjuk';
   static const tabStudentWork = 'Tugas siswa';

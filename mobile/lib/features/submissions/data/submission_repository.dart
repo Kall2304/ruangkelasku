@@ -35,6 +35,9 @@ abstract class Submission with _$Submission {
     DateTime? turnedInAt,
     DateTime? returnedAt,
     @Default(<Attachment>[]) List<Attachment> attachments,
+
+    /// Jawaban singkat Pertanyaan; pilihan ganda ada di [quizAnswers].
+    String? answerText,
     List<QuizAnswerRef>? quizAnswers,
     int? privateCommentCount,
   }) = _Submission;
@@ -89,6 +92,11 @@ class SubmissionRepository {
         ],
       },
     ),
+  );
+
+  /// Menjawab Pertanyaan sekaligus menyerahkan: [answerText] atau [optionId].
+  Future<Submission> answerQuestion(int postId, {String? answerText, int? optionId}) => _one(
+    () => _dio.post('/posts/$postId/my-submission/answer', data: {'answer_text': ?answerText, 'option_id': ?optionId}),
   );
 
   // Sisi guru

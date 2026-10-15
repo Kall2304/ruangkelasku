@@ -77,6 +77,17 @@ class PostDraft {
   final PostStatus status;
   final DateTime? scheduledAt;
 
+  PostDraft withStatus(PostStatus status) => PostDraft(
+    type: type,
+    title: title,
+    body: body,
+    topicId: topicId,
+    points: points,
+    dueAt: dueAt,
+    status: status,
+    scheduledAt: scheduledAt,
+  );
+
   Map<String, dynamic> toFields() => {
     'type': type.name,
     'title': title,

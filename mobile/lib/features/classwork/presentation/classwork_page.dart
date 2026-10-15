@@ -109,6 +109,11 @@ class _CreateMenu extends StatelessWidget {
           child: const Text(S.createQuiz),
         ),
         MenuItemButton(
+          leadingIcon: const Icon(Symbols.help),
+          onPressed: () => open('question'),
+          child: const Text(S.createQuestion),
+        ),
+        MenuItemButton(
           leadingIcon: const Icon(Symbols.menu_book),
           onPressed: () => open('material'),
           child: const Text(S.createMaterial),

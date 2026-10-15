@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../core/copy/strings.dart';
 import '../../../core/layout/breakpoints.dart';
+import '../../../core/models/post.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/theme/tokens.dart';
 import '../../../core/utils/format.dart';
@@ -15,6 +16,7 @@ import '../../../core/widgets/status_chip.dart';
 import '../../../core/widgets/user_avatar.dart';
 import '../../classwork/application/classwork.dart';
 import '../application/submissions.dart';
+import 'question_answer.dart';
 
 /// Layar 29: tugas satu siswa, nilai draf, kembalikan, dan komentar pribadi.
 class SubmissionReview extends ConsumerWidget {
@@ -54,9 +56,14 @@ class SubmissionReview extends ConsumerWidget {
               const SizedBox(height: Space.xs),
               Text(S.turnedInAt(formatWib(s.turnedInAt!, 'd MMM, HH.mm')), style: theme.textTheme.labelMedium),
             ],
-            if (s.quizAnswers != null) ...[
+            // Pertanyaan tidak punya kunci jawaban; hitungan benar hanya untuk kuis.
+            if (post?.type == PostType.quiz && s.quizAnswers != null) ...[
               const SizedBox(height: Space.md),
               Text('${S.correct}: $correct/${s.quizAnswers!.length}', style: theme.textTheme.titleMedium),
+            ],
+            if (post?.type == PostType.question) ...[
+              const SizedBox(height: Space.lg),
+              QuestionAnswerView(postId: s.postId, submission: s, label: S.answer),
             ],
             if (s.attachments.isNotEmpty) ...[
               const SizedBox(height: Space.lg),

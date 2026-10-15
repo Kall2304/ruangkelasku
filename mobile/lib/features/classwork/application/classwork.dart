@@ -58,6 +58,28 @@ class ClassworkActions {
     return post;
   }
 
+  /// Pertanyaan dibuat sebagai draf (atau terjadwal), bentuknya disimpan, lalu diterbitkan
+  /// bila diminta, karena server menolak menerbitkan Pertanyaan tanpa bentuk.
+  Future<Post> createQuestion(
+    int courseId,
+    PostDraft draft,
+    List<String> options, {
+    List<PickedUpload> files = const [],
+    List<String> links = const [],
+  }) async {
+    final publishNow = draft.status == PostStatus.published;
+    final created = await _repo.createPost(
+      courseId,
+      publishNow ? draft.withStatus(PostStatus.draft) : draft,
+      files: files,
+      links: links,
+    );
+    await _repo.saveQuestion(created.id, options);
+    final post = publishNow ? await _repo.publish(created.id) : created;
+    _refreshCourse(courseId);
+    return post;
+  }
+
   Future<Post> publish(Post post) async {
     final published = await _repo.publish(post.id);
     _ref.invalidate(postProvider(post.id));

@@ -240,7 +240,8 @@ class _YourWorkBar extends ConsumerWidget {
               maxChildSize: 0.95,
               builder: (context, controller) => ListView(
                 controller: controller,
-                padding: const EdgeInsets.fromLTRB(Space.lg, 0, Space.lg, Space.lg),
+                // Kolom jawaban Pertanyaan tidak tertutup keyboard.
+                padding: EdgeInsets.fromLTRB(Space.lg, 0, Space.lg, Space.lg + MediaQuery.viewInsetsOf(context).bottom),
                 children: [SubmissionPanel(post: post, course: course, flat: true)],
               ),
             ),

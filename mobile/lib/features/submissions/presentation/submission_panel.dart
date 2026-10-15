@@ -19,6 +19,7 @@ import '../../../core/widgets/status_chip.dart';
 import '../../courses/data/course.dart';
 import '../application/submissions.dart';
 import '../data/submission_repository.dart';
+import 'question_answer.dart';
 
 /// Kartu "Tugas Anda" (komponen SubmissionSheet): status, nilai, lampiran,
 /// tombol "+ Tambahkan atau buat", dan "Serahkan" (alur inti 7).
@@ -109,6 +110,13 @@ class _Content extends ConsumerWidget {
                   label: const Text(S.startQuiz),
                 )
               : OutlinedButton(onPressed: () => context.push('/p/${post.id}/quiz'), child: const Text(S.reviewQuiz))
+        else if (post.type == PostType.question)
+          QuestionAnswerForm(
+            key: ValueKey('question-${submission.status}'),
+            post: post,
+            course: course,
+            submission: submission,
+          )
         else ...[
           AddAttachmentMenu(
             label: S.addOrCreate,

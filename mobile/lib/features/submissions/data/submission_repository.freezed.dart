@@ -292,7 +292,8 @@ as bool?,
 /// @nodoc
 mixin _$Submission {
 
- int get id; int get postId; UserSummary? get student; String get status; DisplayStatus get displayStatus; bool get isLate; double? get draftGrade; double? get grade; DateTime? get turnedInAt; DateTime? get returnedAt; List<Attachment> get attachments; List<QuizAnswerRef>? get quizAnswers; int? get privateCommentCount;
+ int get id; int get postId; UserSummary? get student; String get status; DisplayStatus get displayStatus; bool get isLate; double? get draftGrade; double? get grade; DateTime? get turnedInAt; DateTime? get returnedAt; List<Attachment> get attachments;/// Jawaban singkat Pertanyaan; pilihan ganda ada di [quizAnswers].
+ String? get answerText; List<QuizAnswerRef>? get quizAnswers; int? get privateCommentCount;
 /// Create a copy of Submission
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -306,20 +307,20 @@ $SubmissionCopyWith<Submission> get copyWith => _$SubmissionCopyWithImpl<Submiss
 @override
 bool operator ==(Object other) {
   final _this = this as Submission;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Submission&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.postId, _this.postId) || other.postId == _this.postId)&&(identical(other.student, _this.student) || other.student == _this.student)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.displayStatus, _this.displayStatus) || other.displayStatus == _this.displayStatus)&&(identical(other.isLate, _this.isLate) || other.isLate == _this.isLate)&&(identical(other.draftGrade, _this.draftGrade) || other.draftGrade == _this.draftGrade)&&(identical(other.grade, _this.grade) || other.grade == _this.grade)&&(identical(other.turnedInAt, _this.turnedInAt) || other.turnedInAt == _this.turnedInAt)&&(identical(other.returnedAt, _this.returnedAt) || other.returnedAt == _this.returnedAt)&&const DeepCollectionEquality().equals(other.attachments, _this.attachments)&&const DeepCollectionEquality().equals(other.quizAnswers, _this.quizAnswers)&&(identical(other.privateCommentCount, _this.privateCommentCount) || other.privateCommentCount == _this.privateCommentCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Submission&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.postId, _this.postId) || other.postId == _this.postId)&&(identical(other.student, _this.student) || other.student == _this.student)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.displayStatus, _this.displayStatus) || other.displayStatus == _this.displayStatus)&&(identical(other.isLate, _this.isLate) || other.isLate == _this.isLate)&&(identical(other.draftGrade, _this.draftGrade) || other.draftGrade == _this.draftGrade)&&(identical(other.grade, _this.grade) || other.grade == _this.grade)&&(identical(other.turnedInAt, _this.turnedInAt) || other.turnedInAt == _this.turnedInAt)&&(identical(other.returnedAt, _this.returnedAt) || other.returnedAt == _this.returnedAt)&&const DeepCollectionEquality().equals(other.attachments, _this.attachments)&&(identical(other.answerText, _this.answerText) || other.answerText == _this.answerText)&&const DeepCollectionEquality().equals(other.quizAnswers, _this.quizAnswers)&&(identical(other.privateCommentCount, _this.privateCommentCount) || other.privateCommentCount == _this.privateCommentCount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as Submission;
-  return Object.hash(runtimeType,_this.id,_this.postId,_this.student,_this.status,_this.displayStatus,_this.isLate,_this.draftGrade,_this.grade,_this.turnedInAt,_this.returnedAt,const DeepCollectionEquality().hash(_this.attachments),const DeepCollectionEquality().hash(_this.quizAnswers),_this.privateCommentCount);
+  return Object.hash(runtimeType,_this.id,_this.postId,_this.student,_this.status,_this.displayStatus,_this.isLate,_this.draftGrade,_this.grade,_this.turnedInAt,_this.returnedAt,const DeepCollectionEquality().hash(_this.attachments),_this.answerText,const DeepCollectionEquality().hash(_this.quizAnswers),_this.privateCommentCount);
 }
 
 @override
 String toString() {
   final _this = this as Submission;
-  return 'Submission(id: ${_this.id}, postId: ${_this.postId}, student: ${_this.student}, status: ${_this.status}, displayStatus: ${_this.displayStatus}, isLate: ${_this.isLate}, draftGrade: ${_this.draftGrade}, grade: ${_this.grade}, turnedInAt: ${_this.turnedInAt}, returnedAt: ${_this.returnedAt}, attachments: ${_this.attachments}, quizAnswers: ${_this.quizAnswers}, privateCommentCount: ${_this.privateCommentCount})';
+  return 'Submission(id: ${_this.id}, postId: ${_this.postId}, student: ${_this.student}, status: ${_this.status}, displayStatus: ${_this.displayStatus}, isLate: ${_this.isLate}, draftGrade: ${_this.draftGrade}, grade: ${_this.grade}, turnedInAt: ${_this.turnedInAt}, returnedAt: ${_this.returnedAt}, attachments: ${_this.attachments}, answerText: ${_this.answerText}, quizAnswers: ${_this.quizAnswers}, privateCommentCount: ${_this.privateCommentCount})';
 }
 
 
@@ -330,7 +331,7 @@ abstract mixin class $SubmissionCopyWith<$Res>  {
   factory $SubmissionCopyWith(Submission value, $Res Function(Submission) _then) = _$SubmissionCopyWithImpl;
 @useResult
 $Res call({
- int id, int postId, UserSummary? student, String status, DisplayStatus displayStatus, bool isLate, double? draftGrade, double? grade, DateTime? turnedInAt, DateTime? returnedAt, List<Attachment> attachments, List<QuizAnswerRef>? quizAnswers, int? privateCommentCount
+ int id, int postId, UserSummary? student, String status, DisplayStatus displayStatus, bool isLate, double? draftGrade, double? grade, DateTime? turnedInAt, DateTime? returnedAt, List<Attachment> attachments, String? answerText, List<QuizAnswerRef>? quizAnswers, int? privateCommentCount
 });
 
 
@@ -347,7 +348,7 @@ class _$SubmissionCopyWithImpl<$Res>
 
 /// Create a copy of Submission
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? postId = null,Object? student = freezed,Object? status = null,Object? displayStatus = null,Object? isLate = null,Object? draftGrade = freezed,Object? grade = freezed,Object? turnedInAt = freezed,Object? returnedAt = freezed,Object? attachments = null,Object? quizAnswers = freezed,Object? privateCommentCount = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? postId = null,Object? student = freezed,Object? status = null,Object? displayStatus = null,Object? isLate = null,Object? draftGrade = freezed,Object? grade = freezed,Object? turnedInAt = freezed,Object? returnedAt = freezed,Object? attachments = null,Object? answerText = freezed,Object? quizAnswers = freezed,Object? privateCommentCount = freezed,}) {
   return _then(Submission(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,postId: null == postId ? _self.postId : postId // ignore: cast_nullable_to_non_nullable
@@ -360,7 +361,8 @@ as double?,grade: freezed == grade ? _self.grade : grade // ignore: cast_nullabl
 as double?,turnedInAt: freezed == turnedInAt ? _self.turnedInAt : turnedInAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,returnedAt: freezed == returnedAt ? _self.returnedAt : returnedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,attachments: null == attachments ? _self.attachments : attachments // ignore: cast_nullable_to_non_nullable
-as List<Attachment>,quizAnswers: freezed == quizAnswers ? _self.quizAnswers : quizAnswers // ignore: cast_nullable_to_non_nullable
+as List<Attachment>,answerText: freezed == answerText ? _self.answerText : answerText // ignore: cast_nullable_to_non_nullable
+as String?,quizAnswers: freezed == quizAnswers ? _self.quizAnswers : quizAnswers // ignore: cast_nullable_to_non_nullable
 as List<QuizAnswerRef>?,privateCommentCount: freezed == privateCommentCount ? _self.privateCommentCount : privateCommentCount // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
@@ -459,10 +461,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  int postId,  UserSummary? student,  String status,  DisplayStatus displayStatus,  bool isLate,  double? draftGrade,  double? grade,  DateTime? turnedInAt,  DateTime? returnedAt,  List<Attachment> attachments,  List<QuizAnswerRef>? quizAnswers,  int? privateCommentCount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  int postId,  UserSummary? student,  String status,  DisplayStatus displayStatus,  bool isLate,  double? draftGrade,  double? grade,  DateTime? turnedInAt,  DateTime? returnedAt,  List<Attachment> attachments,  String? answerText,  List<QuizAnswerRef>? quizAnswers,  int? privateCommentCount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Submission() when $default != null:
-return $default(_that.id,_that.postId,_that.student,_that.status,_that.displayStatus,_that.isLate,_that.draftGrade,_that.grade,_that.turnedInAt,_that.returnedAt,_that.attachments,_that.quizAnswers,_that.privateCommentCount);case _:
+return $default(_that.id,_that.postId,_that.student,_that.status,_that.displayStatus,_that.isLate,_that.draftGrade,_that.grade,_that.turnedInAt,_that.returnedAt,_that.attachments,_that.answerText,_that.quizAnswers,_that.privateCommentCount);case _:
   return orElse();
 
 }
@@ -480,10 +482,10 @@ return $default(_that.id,_that.postId,_that.student,_that.status,_that.displaySt
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  int postId,  UserSummary? student,  String status,  DisplayStatus displayStatus,  bool isLate,  double? draftGrade,  double? grade,  DateTime? turnedInAt,  DateTime? returnedAt,  List<Attachment> attachments,  List<QuizAnswerRef>? quizAnswers,  int? privateCommentCount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  int postId,  UserSummary? student,  String status,  DisplayStatus displayStatus,  bool isLate,  double? draftGrade,  double? grade,  DateTime? turnedInAt,  DateTime? returnedAt,  List<Attachment> attachments,  String? answerText,  List<QuizAnswerRef>? quizAnswers,  int? privateCommentCount)  $default,) {final _that = this;
 switch (_that) {
 case _Submission():
-return $default(_that.id,_that.postId,_that.student,_that.status,_that.displayStatus,_that.isLate,_that.draftGrade,_that.grade,_that.turnedInAt,_that.returnedAt,_that.attachments,_that.quizAnswers,_that.privateCommentCount);case _:
+return $default(_that.id,_that.postId,_that.student,_that.status,_that.displayStatus,_that.isLate,_that.draftGrade,_that.grade,_that.turnedInAt,_that.returnedAt,_that.attachments,_that.answerText,_that.quizAnswers,_that.privateCommentCount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -500,10 +502,10 @@ return $default(_that.id,_that.postId,_that.student,_that.status,_that.displaySt
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  int postId,  UserSummary? student,  String status,  DisplayStatus displayStatus,  bool isLate,  double? draftGrade,  double? grade,  DateTime? turnedInAt,  DateTime? returnedAt,  List<Attachment> attachments,  List<QuizAnswerRef>? quizAnswers,  int? privateCommentCount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  int postId,  UserSummary? student,  String status,  DisplayStatus displayStatus,  bool isLate,  double? draftGrade,  double? grade,  DateTime? turnedInAt,  DateTime? returnedAt,  List<Attachment> attachments,  String? answerText,  List<QuizAnswerRef>? quizAnswers,  int? privateCommentCount)?  $default,) {final _that = this;
 switch (_that) {
 case _Submission() when $default != null:
-return $default(_that.id,_that.postId,_that.student,_that.status,_that.displayStatus,_that.isLate,_that.draftGrade,_that.grade,_that.turnedInAt,_that.returnedAt,_that.attachments,_that.quizAnswers,_that.privateCommentCount);case _:
+return $default(_that.id,_that.postId,_that.student,_that.status,_that.displayStatus,_that.isLate,_that.draftGrade,_that.grade,_that.turnedInAt,_that.returnedAt,_that.attachments,_that.answerText,_that.quizAnswers,_that.privateCommentCount);case _:
   return null;
 
 }
@@ -515,7 +517,7 @@ return $default(_that.id,_that.postId,_that.student,_that.status,_that.displaySt
 @JsonSerializable()
 
 class _Submission implements Submission {
-  const _Submission({required this.id, required this.postId, this.student, required this.status, required this.displayStatus, required this.isLate, this.draftGrade, this.grade, this.turnedInAt, this.returnedAt,  List<Attachment> attachments = const <Attachment>[],  List<QuizAnswerRef>? quizAnswers, this.privateCommentCount}): _attachments = attachments,_quizAnswers = quizAnswers;
+  const _Submission({required this.id, required this.postId, this.student, required this.status, required this.displayStatus, required this.isLate, this.draftGrade, this.grade, this.turnedInAt, this.returnedAt,  List<Attachment> attachments = const <Attachment>[], this.answerText,  List<QuizAnswerRef>? quizAnswers, this.privateCommentCount}): _attachments = attachments,_quizAnswers = quizAnswers;
   factory _Submission.fromJson(Map<String, dynamic> json) => _$SubmissionFromJson(json);
 
 @override final  int id;
@@ -535,6 +537,8 @@ class _Submission implements Submission {
   return EqualUnmodifiableListView(_attachments);
 }
 
+/// Jawaban singkat Pertanyaan; pilihan ganda ada di [quizAnswers].
+@override final  String? answerText;
  final  List<QuizAnswerRef>? _quizAnswers;
 @override List<QuizAnswerRef>? get quizAnswers {
   final value = _quizAnswers;
@@ -559,18 +563,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Submission&&(identical(other.id, id) || other.id == id)&&(identical(other.postId, postId) || other.postId == postId)&&(identical(other.student, student) || other.student == student)&&(identical(other.status, status) || other.status == status)&&(identical(other.displayStatus, displayStatus) || other.displayStatus == displayStatus)&&(identical(other.isLate, isLate) || other.isLate == isLate)&&(identical(other.draftGrade, draftGrade) || other.draftGrade == draftGrade)&&(identical(other.grade, grade) || other.grade == grade)&&(identical(other.turnedInAt, turnedInAt) || other.turnedInAt == turnedInAt)&&(identical(other.returnedAt, returnedAt) || other.returnedAt == returnedAt)&&const DeepCollectionEquality().equals(other.attachments, _attachments)&&const DeepCollectionEquality().equals(other.quizAnswers, _quizAnswers)&&(identical(other.privateCommentCount, privateCommentCount) || other.privateCommentCount == privateCommentCount));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Submission&&(identical(other.id, id) || other.id == id)&&(identical(other.postId, postId) || other.postId == postId)&&(identical(other.student, student) || other.student == student)&&(identical(other.status, status) || other.status == status)&&(identical(other.displayStatus, displayStatus) || other.displayStatus == displayStatus)&&(identical(other.isLate, isLate) || other.isLate == isLate)&&(identical(other.draftGrade, draftGrade) || other.draftGrade == draftGrade)&&(identical(other.grade, grade) || other.grade == grade)&&(identical(other.turnedInAt, turnedInAt) || other.turnedInAt == turnedInAt)&&(identical(other.returnedAt, returnedAt) || other.returnedAt == returnedAt)&&const DeepCollectionEquality().equals(other.attachments, _attachments)&&(identical(other.answerText, answerText) || other.answerText == answerText)&&const DeepCollectionEquality().equals(other.quizAnswers, _quizAnswers)&&(identical(other.privateCommentCount, privateCommentCount) || other.privateCommentCount == privateCommentCount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,postId,student,status,displayStatus,isLate,draftGrade,grade,turnedInAt,returnedAt,const DeepCollectionEquality().hash(_attachments),const DeepCollectionEquality().hash(_quizAnswers),privateCommentCount);
+    return Object.hash(runtimeType,id,postId,student,status,displayStatus,isLate,draftGrade,grade,turnedInAt,returnedAt,const DeepCollectionEquality().hash(_attachments),answerText,const DeepCollectionEquality().hash(_quizAnswers),privateCommentCount);
 }
 
 @override
 String toString() {
-    return 'Submission(id: $id, postId: $postId, student: $student, status: $status, displayStatus: $displayStatus, isLate: $isLate, draftGrade: $draftGrade, grade: $grade, turnedInAt: $turnedInAt, returnedAt: $returnedAt, attachments: $attachments, quizAnswers: $quizAnswers, privateCommentCount: $privateCommentCount)';
+    return 'Submission(id: $id, postId: $postId, student: $student, status: $status, displayStatus: $displayStatus, isLate: $isLate, draftGrade: $draftGrade, grade: $grade, turnedInAt: $turnedInAt, returnedAt: $returnedAt, attachments: $attachments, answerText: $answerText, quizAnswers: $quizAnswers, privateCommentCount: $privateCommentCount)';
 }
 
 
@@ -581,7 +585,7 @@ abstract mixin class _$SubmissionCopyWith<$Res> implements $SubmissionCopyWith<$
   factory _$SubmissionCopyWith(_Submission value, $Res Function(_Submission) _then) = __$SubmissionCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int postId, UserSummary? student, String status, DisplayStatus displayStatus, bool isLate, double? draftGrade, double? grade, DateTime? turnedInAt, DateTime? returnedAt, List<Attachment> attachments, List<QuizAnswerRef>? quizAnswers, int? privateCommentCount
+ int id, int postId, UserSummary? student, String status, DisplayStatus displayStatus, bool isLate, double? draftGrade, double? grade, DateTime? turnedInAt, DateTime? returnedAt, List<Attachment> attachments, String? answerText, List<QuizAnswerRef>? quizAnswers, int? privateCommentCount
 });
 
 
@@ -598,7 +602,7 @@ class __$SubmissionCopyWithImpl<$Res>
 
 /// Create a copy of Submission
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? postId = null,Object? student = freezed,Object? status = null,Object? displayStatus = null,Object? isLate = null,Object? draftGrade = freezed,Object? grade = freezed,Object? turnedInAt = freezed,Object? returnedAt = freezed,Object? attachments = null,Object? quizAnswers = freezed,Object? privateCommentCount = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? postId = null,Object? student = freezed,Object? status = null,Object? displayStatus = null,Object? isLate = null,Object? draftGrade = freezed,Object? grade = freezed,Object? turnedInAt = freezed,Object? returnedAt = freezed,Object? attachments = null,Object? answerText = freezed,Object? quizAnswers = freezed,Object? privateCommentCount = freezed,}) {
   return _then(_Submission(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,postId: null == postId ? _self.postId : postId // ignore: cast_nullable_to_non_nullable
@@ -611,7 +615,8 @@ as double?,grade: freezed == grade ? _self.grade : grade // ignore: cast_nullabl
 as double?,turnedInAt: freezed == turnedInAt ? _self.turnedInAt : turnedInAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,returnedAt: freezed == returnedAt ? _self.returnedAt : returnedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,attachments: null == attachments ? _self._attachments : attachments // ignore: cast_nullable_to_non_nullable
-as List<Attachment>,quizAnswers: freezed == quizAnswers ? _self._quizAnswers : quizAnswers // ignore: cast_nullable_to_non_nullable
+as List<Attachment>,answerText: freezed == answerText ? _self.answerText : answerText // ignore: cast_nullable_to_non_nullable
+as String?,quizAnswers: freezed == quizAnswers ? _self._quizAnswers : quizAnswers // ignore: cast_nullable_to_non_nullable
 as List<QuizAnswerRef>?,privateCommentCount: freezed == privateCommentCount ? _self.privateCommentCount : privateCommentCount // ignore: cast_nullable_to_non_nullable
 as int?,
   ));

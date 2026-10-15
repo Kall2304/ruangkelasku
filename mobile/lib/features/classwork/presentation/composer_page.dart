@@ -19,7 +19,7 @@ import '../../../core/widgets/post_card.dart';
 import '../application/classwork.dart';
 import '../data/classwork_models.dart';
 
-/// Layar 21: Buat tugas, materi, atau kuis (alur inti 6).
+/// Layar 21: Buat tugas, materi, kuis, atau Pertanyaan (alur inti 6, stretch 1).
 /// Expanded: form di kiri, panel pengaturan di kanan; Compact: panel di bawah form.
 class ComposerPage extends ConsumerStatefulWidget {
   const ComposerPage({super.key, required this.courseId, required this.type});
@@ -39,13 +39,23 @@ class _ComposerPageState extends ConsumerState<ComposerPage> {
   final _links = <String>[];
   DateTime? _dueAt;
   int? _topicId;
+
+  /// Pertanyaan: jawaban singkat, atau pilihan ganda dengan 2-5 opsi.
+  bool _shortAnswer = true;
+  final _options = [TextEditingController(), TextEditingController()];
   bool _loading = false;
   ApiException? _error;
 
   bool get _isAssignment => widget.type == PostType.assignment;
   bool get _isQuiz => widget.type == PostType.quiz;
+  bool get _isQuestion => widget.type == PostType.question;
+  bool get _hasPoints => _isAssignment || _isQuestion;
   bool get _hasDue => widget.type.hasSubmissions;
-  bool get _dirty => _title.text.trim().isNotEmpty || _body.text.trim().isNotEmpty || _files.isNotEmpty;
+  bool get _dirty =>
+      _title.text.trim().isNotEmpty ||
+      _body.text.trim().isNotEmpty ||
+      _files.isNotEmpty ||
+      _options.any((o) => o.text.trim().isNotEmpty);
 
   @override
   void initState() {
@@ -55,43 +65,45 @@ class _ComposerPageState extends ConsumerState<ComposerPage> {
 
   @override
   void dispose() {
-    for (final c in [_title, _body, _points]) {
+    for (final c in [_title, _body, _points, ..._options]) {
       c.dispose();
     }
     super.dispose();
   }
 
   Future<void> _submit(PostStatus status) async {
+    final options = _isQuestion && !_shortAnswer ? [for (final o in _options) o.text.trim()] : <String>[];
+    if (options.any((o) => o.isEmpty)) {
+      showMessage(context, S.optionsIncomplete);
+      return;
+    }
     DateTime? scheduledAt;
     if (status == PostStatus.scheduled) {
       scheduledAt = await pickWibDateTime(context);
       if (scheduledAt == null) return;
     }
-    final points = _isAssignment ? int.tryParse(_points.text.trim()) : null;
+    final points = _hasPoints ? int.tryParse(_points.text.trim()) : null;
 
     setState(() {
       _loading = true;
       _error = null;
     });
     try {
-      final post = await ref
-          .read(classworkActionsProvider)
-          .createPost(
-            widget.courseId,
-            PostDraft(
-              type: widget.type,
-              title: _title.text.trim(),
-              body: _body.text.trim(),
-              topicId: _topicId,
-              points: points,
-              dueAt: _dueAt,
-              // Kuis disimpan sebagai draf dulu; diterbitkan dari editor soal.
-              status: _isQuiz ? PostStatus.draft : status,
-              scheduledAt: scheduledAt,
-            ),
-            files: _files,
-            links: _links,
-          );
+      final draft = PostDraft(
+        type: widget.type,
+        title: _title.text.trim(),
+        body: _body.text.trim(),
+        topicId: _topicId,
+        points: points,
+        dueAt: _dueAt,
+        // Kuis disimpan sebagai draf dulu; diterbitkan dari editor soal.
+        status: _isQuiz ? PostStatus.draft : status,
+        scheduledAt: scheduledAt,
+      );
+      final actions = ref.read(classworkActionsProvider);
+      final post = _isQuestion
+          ? await actions.createQuestion(widget.courseId, draft, options, files: _files, links: _links)
+          : await actions.createPost(widget.courseId, draft, files: _files, links: _links);
       if (!mounted) return;
       if (_isQuiz) {
         context.pushReplacement('/p/${post.id}/quiz/edit');
@@ -100,7 +112,7 @@ class _ComposerPageState extends ConsumerState<ComposerPage> {
       showMessage(context, switch (status) {
         PostStatus.draft => S.draftSaved,
         PostStatus.scheduled => S.postScheduled,
-        PostStatus.published => S.assignmentCreated,
+        PostStatus.published => _isQuestion ? S.questionPosted : S.assignmentCreated,
       });
       context.pop();
     } on ApiException catch (e) {
@@ -130,9 +142,12 @@ class _ComposerPageState extends ConsumerState<ComposerPage> {
   @override
   Widget build(BuildContext context) {
     final canSubmit = _title.text.trim().isNotEmpty && !_loading;
-    final primaryLabel = _isQuiz
-        ? S.continueToQuestions
-        : (widget.type == PostType.material ? S.postMaterial : S.assign);
+    final primaryLabel = switch (widget.type) {
+      PostType.quiz => S.continueToQuestions,
+      PostType.material => S.postMaterial,
+      PostType.question => S.ask,
+      _ => S.assign,
+    };
     final wide = context.windowSize.isAtLeastExpanded;
 
     final form = [
@@ -140,7 +155,10 @@ class _ComposerPageState extends ConsumerState<ComposerPage> {
         controller: _title,
         autofocus: true,
         textCapitalization: TextCapitalization.sentences,
-        decoration: InputDecoration(labelText: '${S.title} *', errorText: _error?.fieldError('title')),
+        decoration: InputDecoration(
+          labelText: '${_isQuestion ? S.questionField : S.title} *',
+          errorText: _error?.fieldError('title'),
+        ),
       ),
       const SizedBox(height: Space.lg),
       TextField(
@@ -153,6 +171,17 @@ class _ComposerPageState extends ConsumerState<ComposerPage> {
           alignLabelWithHint: true,
         ),
       ),
+      if (_isQuestion) ...[
+        const SizedBox(height: Space.xl),
+        _QuestionForm(
+          shortAnswer: _shortAnswer,
+          options: _options,
+          error: _error?.fieldError('options'),
+          onKindChanged: (shortAnswer) => setState(() => _shortAnswer = shortAnswer),
+          onAdd: () => setState(() => _options.add(TextEditingController())),
+          onRemove: (i) => setState(() => _options.removeAt(i).dispose()),
+        ),
+      ],
       const SizedBox(height: Space.xl),
       Text(S.attachments, style: Theme.of(context).textTheme.titleMedium),
       const SizedBox(height: Space.sm),
@@ -188,7 +217,7 @@ class _ComposerPageState extends ConsumerState<ComposerPage> {
 
     final settings = _Settings(
       courseId: widget.courseId,
-      showPoints: _isAssignment,
+      showPoints: _hasPoints,
       showDue: _hasDue,
       points: _points,
       pointsError: _error?.fieldError('points'),
@@ -345,6 +374,73 @@ class _Settings extends ConsumerWidget {
             for (final t in topics) DropdownMenuEntry(value: t.id, label: t.name),
           ],
         ),
+      ],
+    );
+  }
+}
+
+/// Jenis jawaban Pertanyaan dan, untuk pilihan ganda, isian 2-5 opsi.
+class _QuestionForm extends StatelessWidget {
+  const _QuestionForm({
+    required this.shortAnswer,
+    required this.options,
+    required this.error,
+    required this.onKindChanged,
+    required this.onAdd,
+    required this.onRemove,
+  });
+
+  static const _maxOptions = 5;
+  static const _minOptions = 2;
+
+  final bool shortAnswer;
+  final List<TextEditingController> options;
+  final String? error;
+  final ValueChanged<bool> onKindChanged;
+  final VoidCallback onAdd;
+  final ValueChanged<int> onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(S.questionKind, style: theme.textTheme.titleMedium),
+        const SizedBox(height: Space.sm),
+        SegmentedButton<bool>(
+          segments: const [
+            ButtonSegment(value: true, label: Text(S.shortAnswer), icon: Icon(Symbols.short_text)),
+            ButtonSegment(value: false, label: Text(S.multipleChoice), icon: Icon(Symbols.radio_button_checked)),
+          ],
+          selected: {shortAnswer},
+          onSelectionChanged: (s) => onKindChanged(s.single),
+        ),
+        if (!shortAnswer) ...[
+          const SizedBox(height: Space.lg),
+          for (final (i, option) in options.indexed)
+            Padding(
+              padding: const EdgeInsets.only(bottom: Space.sm),
+              child: TextField(
+                controller: option,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: InputDecoration(
+                  labelText: S.optionLabel(i),
+                  prefixIcon: const Icon(Symbols.radio_button_unchecked),
+                  suffixIcon: options.length > _minOptions
+                      ? IconButton(
+                          tooltip: S.removeOption,
+                          icon: const Icon(Symbols.close),
+                          onPressed: () => onRemove(i),
+                        )
+                      : null,
+                ),
+              ),
+            ),
+          if (options.length < _maxOptions)
+            TextButton.icon(onPressed: onAdd, icon: const Icon(Symbols.add), label: const Text(S.addOption)),
+        ],
+        if (error != null) Text(error!, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error)),
       ],
     );
   }
