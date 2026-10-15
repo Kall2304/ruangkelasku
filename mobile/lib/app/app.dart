@@ -5,6 +5,7 @@ import '../core/copy/strings.dart';
 import '../core/theme/app_theme.dart';
 import '../core/widgets/async_view.dart';
 import '../features/auth/application/session.dart';
+import '../features/settings/application/theme_mode.dart';
 import 'router.dart';
 
 class RuangKelaskuApp extends ConsumerWidget {
@@ -16,6 +17,7 @@ class RuangKelaskuApp extends ConsumerWidget {
       title: S.appName,
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
+      themeMode: ref.watch(themeModeSettingProvider).value ?? ThemeMode.system,
       debugShowCheckedModeBanner: false,
       routerConfig: ref.watch(routerProvider),
       locale: const Locale('id', 'ID'),

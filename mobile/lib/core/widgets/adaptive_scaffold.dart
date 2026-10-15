@@ -85,22 +85,40 @@ class AdaptiveScaffold extends StatelessWidget {
     );
   }
 
+  /// Drawer dari ListTile, bukan NavigationDrawer: label NavigationDrawer tidak bisa
+  /// membungkus dan tingginya tetap, sehingga terpotong pada skala teks besar.
   Widget _drawer(BuildContext context, {required bool closeOnSelect}) {
     final theme = Theme.of(context);
-    return NavigationDrawer(
-      selectedIndex: selectedIndex,
-      onDestinationSelected: (index) {
-        if (closeOnSelect) Navigator.of(context).pop();
-        onDestinationSelected(index);
-      },
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(Space.xxl, Space.xl, Space.lg, Space.lg),
-          child: Text(S.appName, style: theme.textTheme.titleLarge?.copyWith(color: theme.colorScheme.primary)),
+    final scheme = theme.colorScheme;
+    return Drawer(
+      width: Sizes.navDrawerWidth,
+      child: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: Space.md),
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(Space.lg, Space.xl, Space.lg, Space.lg),
+              child: Text(S.appName, style: theme.textTheme.titleLarge?.copyWith(color: scheme.primary)),
+            ),
+            for (final (i, d) in destinations.indexed)
+              ListTile(
+                selected: i == selectedIndex,
+                leading: Icon(i == selectedIndex ? d.selectedIcon : d.icon, fill: i == selectedIndex ? 1 : 0),
+                title: Text(d.label, style: theme.textTheme.labelLarge),
+                minTileHeight: Sizes.touchTarget,
+                shape: const StadiumBorder(),
+                selectedTileColor: scheme.secondaryContainer,
+                selectedColor: scheme.onSecondaryContainer,
+                iconColor: scheme.onSurfaceVariant,
+                textColor: scheme.onSurfaceVariant,
+                onTap: () {
+                  if (closeOnSelect) Navigator.of(context).pop();
+                  onDestinationSelected(i);
+                },
+              ),
+          ],
         ),
-        for (final d in destinations)
-          NavigationDrawerDestination(icon: Icon(d.icon), selectedIcon: Icon(d.selectedIcon), label: Text(d.label)),
-      ],
+      ),
     );
   }
 }

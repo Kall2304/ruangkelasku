@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/config/env.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/dio_client.dart';
+import '../../../core/utils/uploads.dart';
 import 'user.dart';
 
 part 'auth_repository.g.dart';
@@ -44,6 +45,18 @@ class AuthRepository {
 
   Future<User> me() => apiCall(() async {
     final response = await _dio.get<Map<String, dynamic>>('/me');
+    return User.fromJson(response.data!['data'] as Map<String, dynamic>);
+  });
+
+  Future<User> updateName(String name) => apiCall(() async {
+    final response = await _dio.patch<Map<String, dynamic>>('/me', data: {'name': name});
+    return User.fromJson(response.data!['data'] as Map<String, dynamic>);
+  });
+
+  /// jpg/png maksimal 2 MB (docs/api.md, POST /me/avatar).
+  Future<User> uploadAvatar(PickedUpload photo) => apiCall(() async {
+    final form = FormData()..files.add(MapEntry('avatar', photo.toMultipart()));
+    final response = await _dio.post<Map<String, dynamic>>('/me/avatar', data: form);
     return User.fromJson(response.data!['data'] as Map<String, dynamic>);
   });
 

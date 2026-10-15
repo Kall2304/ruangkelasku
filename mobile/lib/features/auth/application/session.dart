@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/dio_client.dart';
 import '../../../core/storage/token_storage.dart';
+import '../../../core/utils/uploads.dart';
 import '../data/auth_repository.dart';
 import '../data/user.dart';
 
@@ -45,6 +46,14 @@ class Session extends _$Session {
         .register(name: name, email: email, password: password, passwordConfirmation: passwordConfirmation);
     await ref.read(tokenStorageProvider).write(token);
     state = AsyncData(user);
+  }
+
+  Future<void> updateName(String name) async {
+    state = AsyncData(await ref.read(authRepositoryProvider).updateName(name));
+  }
+
+  Future<void> updateAvatar(PickedUpload photo) async {
+    state = AsyncData(await ref.read(authRepositoryProvider).uploadAvatar(photo));
   }
 
   Future<void> logout() async {

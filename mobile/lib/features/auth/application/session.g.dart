@@ -35,7 +35,7 @@ final class SessionProvider extends $AsyncNotifierProvider<Session, User?> {
   Session create() => Session();
 }
 
-String _$sessionHash() => r'c5d7691f13d3080ba46be6d39abc655ac700c5c1';
+String _$sessionHash() => r'a66b63257036843dee903cd62aba3b19f0bae5ab';
 
 /// Pengguna yang sedang login; `null` berarti belum login.
 

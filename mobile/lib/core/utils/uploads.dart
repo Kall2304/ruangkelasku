@@ -25,6 +25,16 @@ Future<List<PickedUpload>> pickDocuments() async {
   return [for (final f in files) PickedUpload(name: f.name, bytes: await f.xFile.readAsBytes())];
 }
 
+/// Batas foto profil (docs/api.md, POST /me/avatar).
+const maxAvatarBytes = 2 * 1024 * 1024;
+
+/// Foto profil dari galeri (Android) atau pemilih file (Chrome), diperkecil dulu.
+Future<PickedUpload?> pickAvatar() async {
+  final photo = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 512);
+  if (photo == null) return null;
+  return PickedUpload(name: photo.name, bytes: await photo.readAsBytes());
+}
+
 /// Foto kamera dikompres sebelum diunggah (product brief: hemat kuota).
 Future<PickedUpload?> takePhoto() async {
   final photo = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 70, maxWidth: 1920);

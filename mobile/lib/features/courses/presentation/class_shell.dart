@@ -70,10 +70,18 @@ class _ClassScaffold extends StatelessWidget {
     final index = tabs.indexWhere((t) => location.endsWith('/${t.segment}'));
     final selected = index < 0 ? 0 : index;
     void go(int i) => context.go('/c/${course.id}/${tabs[i].segment}');
+    final actions = [
+      if (course.isTeacher)
+        IconButton(
+          tooltip: S.classSettings,
+          icon: const Icon(Symbols.settings),
+          onPressed: () => context.push('/c/${course.id}/settings'),
+        ),
+    ];
 
     if (context.windowSize.isCompact) {
       return Scaffold(
-        appBar: AppBar(leading: back, title: Text(course.name)),
+        appBar: AppBar(leading: back, title: Text(course.name), actions: actions),
         body: child,
         bottomNavigationBar: NavigationBar(
           selectedIndex: selected,
@@ -95,6 +103,7 @@ class _ClassScaffold extends StatelessWidget {
         appBar: AppBar(
           leading: back,
           title: Text(course.name),
+          actions: actions,
           bottom: TabBar(
             onTap: go,
             isScrollable: true,

@@ -115,7 +115,6 @@ abstract final class S {
   static const tabMyWork = 'Tugas Anda';
   static const classSettings = 'Setelan kelas';
   static const showClassCode = 'Tampilkan kode kelas';
-  static const comingSoon = 'Layar ini sedang disiapkan.';
   static const archivedBanner = 'Kelas ini diarsipkan. Semua isinya hanya bisa dibaca.';
   static const backToClasses = 'Kembali ke daftar kelas';
 
@@ -329,6 +328,44 @@ abstract final class S {
   static const filterAll = 'Semua';
   static const emptyMyWork = 'Belum ada tugas di kelas ini.';
   static const emptyMyWorkFilter = 'Tidak ada tugas dengan status ini.';
+
+  // Setelan kelas
+  static const classDetails = 'Detail kelas';
+  static const classDescription = 'Deskripsi kelas';
+  static const general = 'Umum';
+  static const inviteCode = 'Kode undangan';
+  static const codeEnabled = 'Aktifkan kode kelas';
+  static const codeEnabledHelp = 'Bila dinonaktifkan, siswa tidak bisa bergabung memakai kode.';
+  static const resetCode = 'Reset kode';
+  static const resetCodeTitle = 'Reset kode kelas?';
+  static const resetCodeBody =
+      'Kode lama tidak bisa dipakai lagi untuk bergabung. Siswa yang sudah bergabung tidak terpengaruh.';
+  static const codeReset = 'Kode kelas direset';
+  static const streamSection = 'Forum';
+  static const streamPermission = 'Izin siswa';
+  static const streamPermissions = {
+    'all': 'Siswa dapat memposting dan berkomentar',
+    'comment_only': 'Siswa hanya dapat berkomentar',
+    'teacher_only': 'Hanya pengajar yang dapat memposting atau berkomentar',
+  };
+  static const classworkOnStream = 'Tugas Kelas di forum';
+  static const classworkOnStreamOptions = {
+    'show': 'Tampilkan lampiran dan detail',
+    'compact': 'Tampilkan notifikasi ringkas',
+    'hide': 'Sembunyikan notifikasi',
+  };
+  static const settingsSaved = 'Setelan disimpan';
+
+  // Setelan profil
+  static const profile = 'Profil';
+  static const changePhoto = 'Ganti foto';
+  static const photoTooLarge = 'Foto lebih dari 2 MB.';
+  static const photoUpdated = 'Foto profil diperbarui';
+  static const profileSaved = 'Profil disimpan';
+  static const appearance = 'Tampilan';
+  static const themeSystem = 'Ikuti sistem';
+  static const themeLight = 'Terang';
+  static const themeDark = 'Gelap';
 
   // Notifikasi
   static const emptyNotifications = 'Belum ada notifikasi.';

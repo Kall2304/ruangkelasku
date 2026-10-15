@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../core/copy/strings.dart';
 import '../core/models/display_status.dart';
 import '../core/models/post.dart';
 import '../core/theme/tokens.dart';
@@ -16,6 +15,7 @@ import '../features/classwork/presentation/post_detail_page.dart';
 import '../features/classwork/presentation/quiz_editor_page.dart';
 import '../features/courses/presentation/archived_page.dart';
 import '../features/courses/presentation/class_shell.dart';
+import '../features/courses/presentation/course_settings_page.dart';
 import '../features/courses/presentation/home_page.dart';
 import '../features/courses/presentation/join_create_pages.dart';
 import '../features/grades/presentation/grades_page.dart';
@@ -23,13 +23,13 @@ import '../features/grades/presentation/my_work_page.dart';
 import '../features/notifications/presentation/notifications_page.dart';
 import '../features/people/presentation/people_pages.dart';
 import '../features/quiz/presentation/quiz_take_page.dart';
+import '../features/settings/presentation/settings_page.dart';
 import '../features/stream/presentation/announce_page.dart';
 import '../features/stream/presentation/stream_page.dart';
 import '../features/submissions/presentation/private_comments_page.dart';
 import '../features/submissions/presentation/submission_review.dart';
 import '../features/todo/presentation/to_review_page.dart';
 import '../features/todo/presentation/todo_page.dart';
-import 'coming_soon_page.dart';
 
 part 'router.g.dart';
 
@@ -67,15 +67,16 @@ GoRouter router(Ref ref) {
       GoRoute(path: '/todo', builder: (_, _) => const TodoPage()),
       GoRoute(path: '/to-review', builder: (_, _) => const ToReviewPage()),
       GoRoute(path: '/notifications', builder: (_, _) => const NotificationsPage()),
-      GoRoute(
-        path: '/settings',
-        builder: (_, _) => const ComingSoonPage(location: '/settings', title: S.navSettings),
-      ),
+      GoRoute(path: '/settings', builder: (_, _) => const SettingsPage()),
 
       // Layar penuh di atas kelas (tanpa tab).
       GoRoute(
         path: '/c/:courseId/announce',
         builder: (_, state) => AnnouncePage(courseId: _courseId(state)),
+      ),
+      GoRoute(
+        path: '/c/:courseId/settings',
+        builder: (_, state) => CourseSettingsPage(courseId: _courseId(state)),
       ),
       GoRoute(
         path: '/c/:courseId/people/invite',
