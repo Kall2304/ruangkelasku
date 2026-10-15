@@ -294,7 +294,7 @@ class ThemePicker extends StatelessWidget {
                     color: t.headerFor(brightness),
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: t.key == selected ? ring : Colors.transparent,
+                      color: t.key == selected ? ring : ring.withValues(alpha: 0),
                       width: Sizes.focusRingWidth * 2,
                     ),
                   ),
