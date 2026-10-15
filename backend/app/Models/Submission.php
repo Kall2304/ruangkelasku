@@ -76,6 +76,19 @@ class Submission extends Model
         });
     }
 
+    /**
+     * Nilai draf hanya terlihat guru, termasuk keberadaannya: bagi siswa pemilik,
+     * "Dinilai (draf)" tampil sebagai "Diserahkan" sampai dikembalikan.
+     */
+    public function displayStatusFor(User $viewer): DisplayStatus
+    {
+        $status = $this->display_status;
+
+        return $status === DisplayStatus::Graded && $viewer->id === $this->student_id
+            ? DisplayStatus::TurnedIn
+            : $status;
+    }
+
     protected function isLate(): Attribute
     {
         return Attribute::get(function (): bool {

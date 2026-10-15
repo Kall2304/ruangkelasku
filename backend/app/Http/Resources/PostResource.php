@@ -42,7 +42,7 @@ class PostResource extends JsonResource
             // Siswa: submission miliknya. Guru: hitungan per status.
             'my_submission' => $this->when(
                 $hasSubmissions && $this->relationLoaded('submissions'),
-                fn () => $this->mySubmission($this->submissions->first()),
+                fn () => $this->mySubmission($this->submissions->first(), $request),
             ),
             'submission_counts' => $this->when(
                 $hasSubmissions && isset($this->assigned_count),
@@ -56,7 +56,7 @@ class PostResource extends JsonResource
         ];
     }
 
-    private function mySubmission(?Submission $submission): ?array
+    private function mySubmission(?Submission $submission, Request $request): ?array
     {
         if ($submission === null) {
             return null;
@@ -66,7 +66,7 @@ class PostResource extends JsonResource
         return [
             'id' => $submission->id,
             'status' => $submission->status,
-            'display_status' => $submission->display_status,
+            'display_status' => $submission->displayStatusFor($request->user()),
             'is_late' => $submission->is_late,
             // Nilai draf tidak pernah dikirim ke siswa.
             'grade' => $submission->grade === null ? null : (float) $submission->grade,

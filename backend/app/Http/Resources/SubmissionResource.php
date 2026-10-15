@@ -25,7 +25,7 @@ class SubmissionResource extends JsonResource
             'post_id' => $this->post_id,
             'student' => new UserSummaryResource($this->whenLoaded('student')),
             'status' => $this->status,
-            'display_status' => $this->display_status,
+            'display_status' => $this->displayStatusFor($request->user()),
             'is_late' => $this->is_late,
             'draft_grade' => $this->when(! $isOwner, fn () => self::number($this->draft_grade)),
             'grade' => self::number($this->grade),
