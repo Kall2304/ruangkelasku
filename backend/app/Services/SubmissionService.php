@@ -42,7 +42,7 @@ class SubmissionService
         $this->attachments->delete($attachment);
     }
 
-    /** assigned atau returned → turned_in. Kuis diserahkan lewat submitQuiz(). */
+    /** assigned atau returned → turned_in. Kuis lewat submitQuiz(), Pertanyaan lewat answerQuestion(). */
     public function turnIn(Submission $submission): Submission
     {
         $this->ensureEditable($submission);
@@ -50,6 +50,11 @@ class SubmissionService
         if ($submission->post->type === PostType::Quiz) {
             throw ValidationException::withMessages([
                 'answers' => ['Kuis diserahkan bersama jawabannya.'],
+            ]);
+        }
+        if ($submission->post->type === PostType::Question) {
+            throw ValidationException::withMessages([
+                'answer_text' => ['Pertanyaan diserahkan bersama jawabannya.'],
             ]);
         }
 
@@ -113,6 +118,47 @@ class SubmissionService
                 'status' => SubmissionStatus::TurnedIn,
                 'turned_in_at' => now(),
                 'draft_grade' => $score,
+            ]);
+        });
+
+        $this->notifyTeachers($submission);
+
+        return $submission;
+    }
+
+    /**
+     * Menjawab Pertanyaan (stretch) sekaligus menyerahkan. Jawaban lama diganti; boleh
+     * menjawab ulang setelah membatalkan penyerahan atau setelah dikembalikan.
+     */
+    public function answerQuestion(Submission $submission, ?string $answerText, ?int $optionId): Submission
+    {
+        $this->ensureEditable($submission);
+        $question = $submission->post->quizQuestions()->with('options')->firstOrFail();
+        $isChoice = $question->options->isNotEmpty();
+
+        $option = $isChoice ? $question->options->firstWhere('id', $optionId) : null;
+        if ($isChoice && $option === null) {
+            throw ValidationException::withMessages(['option_id' => ['Pilih salah satu opsi.']]);
+        }
+        $answerText = $isChoice ? null : trim((string) $answerText);
+        if (! $isChoice && $answerText === '') {
+            throw ValidationException::withMessages(['answer_text' => ['Tulis jawaban Anda.']]);
+        }
+
+        DB::transaction(function () use ($submission, $question, $option, $answerText) {
+            $submission->quizAnswers()->delete();
+            if ($option !== null) {
+                $submission->quizAnswers()->create([
+                    'quiz_question_id' => $question->id,
+                    'quiz_option_id' => $option->id,
+                    'is_correct' => false,
+                ]);
+            }
+
+            $submission->update([
+                'answer_text' => $answerText,
+                'status' => SubmissionStatus::TurnedIn,
+                'turned_in_at' => now(),
             ]);
         });
 

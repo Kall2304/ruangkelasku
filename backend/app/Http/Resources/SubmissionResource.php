@@ -17,6 +17,7 @@ class SubmissionResource extends JsonResource
     {
         $isOwner = $request->user()->id === $this->student_id;
         $isQuiz = $this->post->type === PostType::Quiz;
+        $isQuestion = $this->post->type === PostType::Question;
         // Kunci jawaban kuis baru terlihat siswa setelah dikembalikan.
         $showCorrectness = ! $isOwner || $this->status === SubmissionStatus::Returned;
 
@@ -32,11 +33,14 @@ class SubmissionResource extends JsonResource
             'turned_in_at' => $this->turned_in_at?->toIso8601ZuluString(),
             'returned_at' => $this->returned_at?->toIso8601ZuluString(),
             'attachments' => AttachmentResource::collection($this->whenLoaded('attachments')),
-            'quiz_answers' => $isQuiz && $this->relationLoaded('quizAnswers')
+            // Pertanyaan (stretch): jawaban singkat, atau opsi pilihan ganda di quiz_answers.
+            'answer_text' => $isQuestion ? $this->answer_text : null,
+            'quiz_answers' => ($isQuiz || $isQuestion) && $this->relationLoaded('quizAnswers')
                 ? $this->quizAnswers->map(fn ($answer) => [
                     'question_id' => $answer->quiz_question_id,
                     'option_id' => $answer->quiz_option_id,
-                    'is_correct' => $showCorrectness ? $answer->is_correct : null,
+                    // Pertanyaan tidak punya kunci jawaban.
+                    'is_correct' => $isQuiz && $showCorrectness ? $answer->is_correct : null,
                 ])->values()
                 : null,
             'private_comment_count' => $this->whenCounted('privateComments'),

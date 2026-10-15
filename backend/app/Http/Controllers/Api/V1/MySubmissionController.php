@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\StoreAttachmentRequest;
+use App\Http\Requests\Quiz\AnswerQuestionRequest;
 use App\Http\Requests\Quiz\SubmitQuizRequest;
 use App\Http\Resources\AttachmentResource;
 use App\Http\Resources\SubmissionResource;
@@ -65,6 +66,18 @@ class MySubmissionController extends Controller
         $submission = $this->mine($request, $post);
 
         return $this->resource($this->submissions->submitQuiz($submission, $request->answerMap()));
+    }
+
+    /** Pertanyaan (stretch): menjawab sekaligus menyerahkan. */
+    public function answerQuestion(AnswerQuestionRequest $request, Post $post): SubmissionResource
+    {
+        $submission = $this->mine($request, $post);
+
+        return $this->resource($this->submissions->answerQuestion(
+            $submission,
+            $request->validated('answer_text'),
+            $request->validated('option_id'),
+        ));
     }
 
     private function mine(Request $request, Post $post): Submission

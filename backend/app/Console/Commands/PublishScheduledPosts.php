@@ -28,8 +28,8 @@ class PublishScheduledPosts extends Command
                     $publisher->publish($post);
                     $published++;
                 } catch (ValidationException) {
-                    // Kuis tanpa soal tetap terjadwal sampai guru menambahkan soal.
-                    $this->warn("Posting #{$post->id} dilewati: kuis belum punya soal.");
+                    // Kuis tanpa soal atau Pertanyaan tanpa bentuk tetap terjadwal sampai guru melengkapinya.
+                    $this->warn("Posting #{$post->id} dilewati: soal atau bentuk pertanyaan belum disimpan.");
                 }
             });
 

@@ -81,6 +81,7 @@ Route::prefix('v1')->group(function () {
         // Kuis
         Route::get('posts/{post}/quiz', [QuizController::class, 'show']);
         Route::put('posts/{post}/quiz', [QuizController::class, 'update']);
+        Route::put('posts/{post}/question', [QuizController::class, 'updateQuestion']); // stretch: Pertanyaan
 
         // Pengumpulan: sisi siswa
         Route::get('posts/{post}/my-submission', [MySubmissionController::class, 'show']);
@@ -89,6 +90,7 @@ Route::prefix('v1')->group(function () {
         Route::post('posts/{post}/my-submission/turn-in', [MySubmissionController::class, 'turnIn']);
         Route::post('posts/{post}/my-submission/unsubmit', [MySubmissionController::class, 'unsubmit']);
         Route::post('posts/{post}/my-submission/quiz', [MySubmissionController::class, 'submitQuiz']);
+        Route::post('posts/{post}/my-submission/answer', [MySubmissionController::class, 'answerQuestion']); // stretch
 
         // Pengumpulan: sisi guru
         Route::get('posts/{post}/submissions', [SubmissionController::class, 'index']);

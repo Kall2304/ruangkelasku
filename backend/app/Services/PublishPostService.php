@@ -25,6 +25,11 @@ class PublishPostService
                 'status' => ['Tambahkan minimal satu soal sebelum menerbitkan kuis.'],
             ]);
         }
+        if ($post->type === PostType::Question && ! $post->quizQuestions()->exists()) {
+            throw ValidationException::withMessages([
+                'status' => ['Simpan bentuk pertanyaan sebelum menerbitkan.'],
+            ]);
+        }
 
         DB::transaction(function () use ($post) {
             $post->update([

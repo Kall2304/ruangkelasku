@@ -11,7 +11,6 @@ use App\Models\Invitation;
 use App\Models\Post;
 use App\Models\PrivateComment;
 use App\Models\QuizAnswer;
-use App\Models\QuizQuestion;
 use App\Models\Submission;
 use App\Models\Topic;
 use App\Models\User;
@@ -20,6 +19,7 @@ use App\Notifications\PrivateCommentPosted;
 use App\Notifications\SubmissionReturned;
 use App\Notifications\SubmissionTurnedIn;
 use App\Services\PublishPostService;
+use App\Services\QuestionService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
@@ -220,6 +220,23 @@ class DemoSeeder extends Seeder
             'returned_at' => $this->ago(hours: 4),
         ]);
 
+        // Pertanyaan (stretch): jawaban singkat sudah dijawab Sari; pilihan ganda masih ditugaskan.
+        $meaning = $this->question($course, [
+            'topic_id' => $derivative->id,
+            'title' => 'Dengan kata-katamu sendiri, apa arti turunan suatu fungsi?',
+            'points' => 10,
+            'due_at' => now()->addDays(3)->setTime(16, 59),
+        ], options: [], publishedAt: $this->ago(hours: 10));
+        $this->submission($meaning, $sari)->update([
+            'status' => SubmissionStatus::TurnedIn,
+            'answer_text' => 'Turunan menunjukkan laju perubahan nilai fungsi terhadap perubahan x.',
+            'turned_in_at' => $this->ago(hours: 3),
+        ]);
+        $this->question($course, [
+            'topic_id' => $derivative->id,
+            'title' => 'Bagian mana dari Bab 2 yang masih paling membingungkan?',
+        ], options: ['Aturan rantai', 'Turunan fungsi trigonometri', 'Soal cerita'], publishedAt: $this->ago(hours: 8));
+
         $this->post($course, [
             'type' => PostType::Assignment,
             'topic_id' => $derivative->id,
@@ -343,6 +360,17 @@ class DemoSeeder extends Seeder
             $this->publisher->publish($post);
             $post->update(['published_at' => $publishedAt]);
         }
+
+        return $post;
+    }
+
+    /** Pertanyaan: bentuk disimpan lewat service yang sama dengan API, lalu diterbitkan. */
+    private function question(Course $course, array $attributes, array $options, Carbon $publishedAt): Post
+    {
+        $post = $this->post($course, ['type' => PostType::Question, ...$attributes]);
+        app(QuestionService::class)->save($post, $options);
+        $this->publisher->publish($post);
+        $post->update(['published_at' => $publishedAt]);
 
         return $post;
     }
