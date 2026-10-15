@@ -313,6 +313,23 @@ abstract final class S {
   static const countAssignedLabel = 'Ditugaskan';
   static const countGradedLabel = 'Dinilai';
 
+  // Tab Nilai (guru)
+  static const byStudent = 'Per siswa';
+  static const byAssignment = 'Per tugas';
+  static const exportCsv = 'Ekspor ke CSV';
+  static const exportDownloaded = 'File nilai diunduh';
+  static const emptyGrades = 'Belum ada tugas yang bisa dinilai. Buat tugas atau kuis di Tugas Kelas.';
+  static const draftShort = 'Draf';
+  static String outOf(int points) => 'dari $points';
+  static const noGradePoints = 'Tanpa nilai';
+  static String gradeCellLabel(String student, String post, String value) => '$student, $post: $value';
+  static const notGraded = 'Belum dinilai';
+
+  // Tugas Anda (siswa)
+  static const filterAll = 'Semua';
+  static const emptyMyWork = 'Belum ada tugas di kelas ini.';
+  static const emptyMyWorkFilter = 'Tidak ada tugas dengan status ini.';
+
   // Notifikasi
   static const emptyNotifications = 'Belum ada notifikasi.';
   static const markAllRead = 'Tandai semua sudah dibaca';

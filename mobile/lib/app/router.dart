@@ -18,6 +18,8 @@ import '../features/courses/presentation/archived_page.dart';
 import '../features/courses/presentation/class_shell.dart';
 import '../features/courses/presentation/home_page.dart';
 import '../features/courses/presentation/join_create_pages.dart';
+import '../features/grades/presentation/grades_page.dart';
+import '../features/grades/presentation/my_work_page.dart';
 import '../features/notifications/presentation/notifications_page.dart';
 import '../features/people/presentation/people_pages.dart';
 import '../features/quiz/presentation/quiz_take_page.dart';
@@ -125,8 +127,8 @@ GoRouter router(Ref ref) {
           _tab('/c/:courseId/stream', (id) => StreamPage(courseId: id)),
           _tab('/c/:courseId/classwork', (id) => ClassworkPage(courseId: id)),
           _tab('/c/:courseId/people', (id) => PeoplePage(courseId: id)),
-          _tab('/c/:courseId/grades', (_) => const ComingSoonBody()),
-          _tab('/c/:courseId/my-work', (_) => const ComingSoonBody()),
+          _tab('/c/:courseId/grades', (id) => GradesPage(courseId: id)),
+          _tab('/c/:courseId/my-work', (id) => MyWorkPage(courseId: id)),
         ],
       ),
     ],

@@ -74,6 +74,12 @@ abstract final class Sizes {
   /// Pola dua panel (daftar di kiri, detail di kanan) aktif bila area konten minimal selebar ini.
   static const double listDetailMinWidth = 720;
   static const double listPaneWidth = 340;
+
+  /// Grid Tab Nilai: kolom nama siswa tetap, kolom tugas bergulir mendatar.
+  static const double gradeNameColumnWidth = 200;
+  static const double gradeColumnWidth = 128;
+  static const double gradeHeaderHeight = 112;
+  static const double gradeRowHeight = 56;
   static const double attachmentMaxWidth = 320;
   static const double formMaxWidth = 560;
   static const double focusRingWidth = 2;

@@ -4,6 +4,7 @@ import '../../../core/models/comment.dart';
 import '../../../core/utils/uploads.dart';
 import '../../auth/application/session.dart';
 import '../../classwork/application/classwork.dart';
+import '../../grades/application/grades.dart';
 import '../../stream/application/stream.dart';
 import '../../todo/application/todo.dart';
 import '../data/submission_repository.dart';
@@ -63,7 +64,8 @@ class SubmissionActions {
     _ref
       ..invalidate(postSubmissionsProvider(submission.postId))
       ..invalidate(submissionProvider(submission.id))
-      ..invalidate(toReviewFeedProvider);
+      ..invalidate(toReviewFeedProvider)
+      ..invalidate(gradeGridProvider);
     return graded;
   }
 
@@ -72,7 +74,8 @@ class SubmissionActions {
     _ref
       ..invalidate(postSubmissionsProvider(postId))
       ..invalidate(postProvider(postId))
-      ..invalidate(toReviewFeedProvider);
+      ..invalidate(toReviewFeedProvider)
+      ..invalidate(gradeGridProvider);
     for (final id in submissionIds) {
       _ref.invalidate(submissionProvider(id));
     }
@@ -92,7 +95,8 @@ class SubmissionActions {
       ..invalidate(mySubmissionProvider(postId))
       ..invalidate(postProvider(postId))
       // Semua tab dan filter Daftar tugas, karena tugas ini bisa pindah tab.
-      ..invalidate(todoFeedProvider);
+      ..invalidate(todoFeedProvider)
+      ..invalidate(myWorkProvider);
     if (post != null) {
       _ref
         ..invalidate(classworkProvider(post.courseId))
