@@ -4,7 +4,10 @@ Clone Google Classroom untuk UTS mata kuliah Pemrograman Aplikasi Bergerak.
 
 | Nama | NIM |
 | --- | --- |
-| Haikal Ahmad El Salman | _(isi NIM)_ |
+| Rafi Ramadhana Bukaryo | 24051214180 |
+| Danella Andritya Putri | 24051214205 |
+| Haikal Ahmad El Salman | 24051214207 |
+| Revo Novandra | 24051214211 |
 
 ## Google Classroom → RuangKelasku
 
