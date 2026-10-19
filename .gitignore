@@ -15,3 +15,7 @@ desktop.ini
 
 # Python (skrip skill)
 __pycache__/
+
+# Tidak diunggah ke GitHub
+docs/
+bugandroid.jpeg
